@@ -28,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
             AssetsPathUtil.backgroundSvg,
             width: double.maxFinite,
             height: double.maxFinite,
+            fit: BoxFit.cover,
           ),
           Center(child: SvgPicture.asset(AssetsPathUtil.logoSvg, height: 35)),
           Align(
