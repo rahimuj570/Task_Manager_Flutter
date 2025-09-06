@@ -32,7 +32,14 @@ class _SplashScreenState extends State<SplashScreen> {
           Center(child: SvgPicture.asset(AssetsPathUtil.logoSvg, height: 35)),
           Align(
             alignment: Alignment(0, .8),
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: Colors.green),
+          ),
+          Align(
+            alignment: Alignment(0, .98),
+            child: Text(
+              'Task_Manager by Rahimuj570 - v1.0',
+              style: TextStyle(fontSize: 10),
+            ),
           ),
         ],
       ),
