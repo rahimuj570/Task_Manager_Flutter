@@ -10,7 +10,6 @@ class AppBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Stack(
-        alignment: Alignment.center,
         children: [
           SvgPicture.asset(
             AssetsPathUtil.backgroundSvg,
