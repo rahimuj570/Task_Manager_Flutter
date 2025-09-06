@@ -1,36 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:pinput/pinput.dart';
+import 'package:todo_app/ui/screens/forgot_password_pin_screen.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
-import 'package:todo_app/ui/screens/set_new_password_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 
-class ForgotPasswordPinScreen extends StatefulWidget {
-  const ForgotPasswordPinScreen({super.key});
+class SetNewPasswordScreen extends StatefulWidget {
+  const SetNewPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordPinScreen> createState() =>
-      _ForgotPasswordPinScreenState();
+  State<SetNewPasswordScreen> createState() => _SetNewPasswordScreenState();
 }
 
-class _ForgotPasswordPinScreenState extends State<ForgotPasswordPinScreen> {
-  final defaultPinTheme = PinTheme(
-    width: 56,
-    height: 56,
-    textStyle: TextStyle(
-      fontSize: 20,
-      color: Color.fromRGBO(30, 60, 87, 1),
-      fontWeight: FontWeight.w600,
-    ),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      border: Border.all(color: Colors.green),
-      borderRadius: BorderRadius.circular(10),
-    ),
-  );
-
-  bool _isPinCompleted = false;
-
+class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,21 +23,14 @@ class _ForgotPasswordPinScreenState extends State<ForgotPasswordPinScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      debugPrint('object');
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back_ios_new_rounded),
-                  ),
-                  SizedBox(height: 70),
+                  SizedBox(height: 80),
                   Text(
-                    "Pin Verification",
+                    "Set Password",
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   SizedBox(height: 8),
                   Text(
-                    "A 6 digit verification pin has been sent to your email address",
+                    "Minimum length of password should be 8 characters with number combinations",
                     style: TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.w500,
@@ -66,29 +40,19 @@ class _ForgotPasswordPinScreenState extends State<ForgotPasswordPinScreen> {
                   Form(
                     child: Column(
                       children: [
-                        Pinput(
-                          length: 6,
-                          defaultPinTheme: defaultPinTheme,
-                          onChanged: (value) {
-                            if (value.length != 6) {
-                              setState(() {
-                                _isPinCompleted = false;
-                              });
-                            }
-                          },
-                          onCompleted: (pin) {
-                            setState(() {
-                              _isPinCompleted = true;
-                            });
-                            print('object');
-                          },
+                        TextFormField(
+                          decoration: InputDecoration(label: Text("Password")),
+                        ),
+                        SizedBox(height: 8),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            label: Text("Confirm Password"),
+                          ),
                         ),
                         SizedBox(height: 12),
                         FilledButton(
-                          onPressed: _isPinCompleted == false
-                              ? null
-                              : _verifyPin,
-                          child: Text('Verify'),
+                          onPressed: _gotoPinScreen,
+                          child: Text('Confirm'),
                         ),
                       ],
                     ),
@@ -135,11 +99,10 @@ class _ForgotPasswordPinScreenState extends State<ForgotPasswordPinScreen> {
     );
   }
 
-  void _verifyPin() {
-    Navigator.pushAndRemoveUntil(
+  void _gotoPinScreen() {
+    Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SetNewPasswordScreen()),
-      (route) => false,
+      MaterialPageRoute(builder: (context) => ForgotPasswordPinScreen()),
     );
   }
 }

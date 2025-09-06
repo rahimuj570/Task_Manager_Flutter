@@ -23,7 +23,7 @@ class TaskManagerApp extends StatelessWidget {
             fixedSize: Size.fromWidth(double.maxFinite),
             backgroundColor: Colors.green,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(6),
             ),
           ),
         ),
