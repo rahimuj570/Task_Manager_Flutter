@@ -1,17 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/ui/screens/forgot_password_email_screen.dart';
-import 'package:todo_app/ui/screens/registration_screen.dart';
+import 'package:todo_app/ui/screens/login_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgotPasswordEmailScreen extends StatefulWidget {
+  const ForgotPasswordEmailScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgotPasswordEmailScreen> createState() =>
+      _ForgotPasswordEmailScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordEmailScreenState extends State<ForgotPasswordEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,19 +25,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   SizedBox(height: 80),
                   Text(
-                    "Get Start With",
+                    "Your Email Address",
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 8),
+                  Text(
+                    "A 6 digit verification pin will sent to you email address",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 12),
                   Form(
                     child: Column(
                       children: [
                         TextFormField(
                           decoration: InputDecoration(label: Text("Email")),
-                        ),
-                        SizedBox(height: 8),
-                        TextFormField(
-                          decoration: InputDecoration(label: Text("Password")),
                         ),
                         SizedBox(height: 12),
                         FilledButton(
@@ -52,14 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   Center(
                     child: Column(
                       children: [
-                        TextButton(
-                          onPressed: _gotoForgotPasswordEmailScreen,
-                          child: Text(
-                            'Forgot Password?',
-                            style: TextStyle(color: Colors.grey.shade600),
-                          ),
-                        ),
-                        SizedBox(height: 4),
                         RichText(
                           text: TextSpan(
                             style: TextStyle(
@@ -67,11 +63,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.w600,
                             ),
                             children: [
-                              TextSpan(text: "Don't have an account? "),
+                              TextSpan(text: "Have an account? "),
                               TextSpan(
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = _gotoRegistrationScreen,
-                                text: 'Sign Up',
+                                  ..onTap = _gotoLoginScreen,
+                                text: 'Login',
                                 style: TextStyle(color: Colors.green),
                               ),
                             ],
@@ -89,17 +85,11 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _gotoRegistrationScreen() {
-    Navigator.pushReplacement(
+  void _gotoLoginScreen() {
+    Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => RegistrationScreen()),
-    );
-  }
-
-  void _gotoForgotPasswordEmailScreen() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => ForgotPasswordEmailScreen()),
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+      (route) => false,
     );
   }
 }
