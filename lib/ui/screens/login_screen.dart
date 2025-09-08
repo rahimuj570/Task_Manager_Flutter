@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/ui/screens/forgot_password_email_screen.dart';
+import 'package:todo_app/ui/screens/main_nav_bar_holder.dart';
 import 'package:todo_app/ui/screens/registration_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 
@@ -41,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 12),
                         FilledButton(
-                          onPressed: () {},
+                          onPressed: _loginCheck,
                           child: Icon(Icons.arrow_circle_right_outlined),
                         ),
                       ],
@@ -100,6 +101,14 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => ForgotPasswordEmailScreen()),
+    );
+  }
+
+  void _loginCheck() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MainNavBarHolder()),
+      (route) => false,
     );
   }
 }
