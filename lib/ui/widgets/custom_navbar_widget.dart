@@ -28,7 +28,8 @@ class CustomNavbarWidget extends StatelessWidget {
           return Expanded(
             child: InkWell(
               onTap: () => clickDestination(index),
-              child: Container(
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: selectedDestination == index
