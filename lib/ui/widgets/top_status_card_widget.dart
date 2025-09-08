@@ -12,6 +12,8 @@ class TopStatusCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.zero,
+      elevation: 0,
       shape: RoundedRectangleBorder(),
       color: Colors.white,
       child: Padding(
