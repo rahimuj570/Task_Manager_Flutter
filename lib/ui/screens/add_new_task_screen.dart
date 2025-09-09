@@ -49,6 +49,11 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             alignLabelWithHint: true,
                           ),
                         ),
+                        SizedBox(height: 8),
+                        FilledButton.icon(
+                          onPressed: () {},
+                          label: Icon(Icons.add_circle_outline_sharp),
+                        ),
                       ],
                     ),
                   ),
