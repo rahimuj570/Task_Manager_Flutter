@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 
 class TaskTileWidget extends StatelessWidget {
-  const TaskTileWidget({super.key});
+  const TaskTileWidget({
+    super.key,
+    required this.deleteFunc,
+    required this.editFunc,
+    required this.status,
+    required this.statusColor,
+  });
+
+  final String status;
+  final Function(int) deleteFunc;
+  final Function(int) editFunc;
+  final Color statusColor;
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +46,13 @@ class TaskTileWidget extends StatelessWidget {
               Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Colors.cyan,
+                  color: statusColor,
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 1),
                 child: Text(
-                  "new",
+                  status,
                   style: TextStyle(color: Colors.white, fontSize: 10),
                 ),
               ),
@@ -52,15 +63,17 @@ class TaskTileWidget extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
                     iconSize: 20,
-                    onPressed: () {},
+                    onPressed: editFunc(0),
                     icon: Icon(Icons.edit),
+                    color: Colors.blue,
                   ),
                   IconButton(
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
                     iconSize: 20,
-                    onPressed: () {},
+                    onPressed: deleteFunc(1),
                     icon: Icon(Icons.delete),
+                    color: Colors.red,
                   ),
                 ],
               ),

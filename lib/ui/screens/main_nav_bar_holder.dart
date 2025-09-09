@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/ui/screens/task_screens/completed_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/new_task_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 import 'package:todo_app/ui/widgets/custom_navbar_widget.dart';
@@ -12,11 +13,11 @@ class MainNavBarHolder extends StatefulWidget {
 }
 
 class _MainNavBarHolderState extends State<MainNavBarHolder> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   List<Widget> taskScreens = [
     NewTaskScreen(),
-    NewTaskScreen(),
+    CompletedTaskScreen(),
     NewTaskScreen(),
     NewTaskScreen(),
   ];

@@ -53,7 +53,15 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             child: Material(
               child: ListView.separated(
                 controller: _scrollController,
-                itemBuilder: (context, index) => TaskTileWidget(),
+                itemBuilder: (context, index) => TaskTileWidget(
+                  statusColor: Colors.cyan,
+                  status: 'new',
+                  deleteFunc: (int id) =>
+                      () => _deleteFunc(id),
+
+                  editFunc: (int id) =>
+                      () => _editFunc(id),
+                ),
                 separatorBuilder: (context, index) => SizedBox(height: 5),
                 itemCount: 10,
               ),
@@ -68,5 +76,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         ],
       ),
     );
+  }
+
+  void _editFunc(int i) {
+    print("ed");
+  }
+
+  void _deleteFunc(int i) {
+    print("del");
   }
 }
