@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/ui/screens/add_new_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/cancelled_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/completed_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/new_task_screen.dart';
+import 'package:todo_app/ui/screens/task_screens/progress_task_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 import 'package:todo_app/ui/widgets/custom_navbar_widget.dart';
 import 'package:todo_app/ui/widgets/tm_app_bar.dart';
@@ -20,7 +22,7 @@ class _MainNavBarHolderState extends State<MainNavBarHolder> {
     NewTaskScreen(),
     CompletedTaskScreen(),
     CancelledTaskScreen(),
-    NewTaskScreen(),
+    ProgressTaskScreen(),
   ];
 
   @override
@@ -56,7 +58,12 @@ class _MainNavBarHolderState extends State<MainNavBarHolder> {
       floatingActionButton: _selectedIndex == 0
           ? FloatingActionButton(
               shape: CircleBorder(),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddNewTaskScreen()),
+                );
+              },
               child: Icon(Icons.add),
             )
           : null,
