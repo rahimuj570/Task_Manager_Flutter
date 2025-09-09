@@ -10,6 +10,22 @@ class NewTaskScreen extends StatefulWidget {
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isAtBottom = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _scrollController.addListener(() {
+      setState(() {
+        _isAtBottom =
+            _scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 10;
+        print(_scrollController.position.pixels);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,11 +52,18 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           Expanded(
             child: Material(
               child: ListView.separated(
+                controller: _scrollController,
                 itemBuilder: (context, index) => TaskTileWidget(),
                 separatorBuilder: (context, index) => SizedBox(height: 5),
                 itemCount: 10,
               ),
             ),
+          ),
+          AnimatedPadding(
+            padding: EdgeInsets.only(bottom: _isAtBottom ? 70 : 0),
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            child: SizedBox(),
           ),
         ],
       ),
