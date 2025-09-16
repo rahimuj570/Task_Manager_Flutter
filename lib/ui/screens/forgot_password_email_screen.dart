@@ -6,6 +6,7 @@ import 'package:todo_app/ui/widgets/app_background.dart';
 
 class ForgotPasswordEmailScreen extends StatefulWidget {
   const ForgotPasswordEmailScreen({super.key});
+  static const name = "forgot_email";
 
   @override
   State<ForgotPasswordEmailScreen> createState() =>

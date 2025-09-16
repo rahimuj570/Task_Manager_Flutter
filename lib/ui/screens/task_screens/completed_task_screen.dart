@@ -3,6 +3,7 @@ import 'package:todo_app/ui/widgets/task_tile_widget.dart';
 
 class CompletedTaskScreen extends StatefulWidget {
   const CompletedTaskScreen({super.key});
+  static const name = "completed_task_screen";
 
   @override
   State<CompletedTaskScreen> createState() => _CompletedTaskScreenState();

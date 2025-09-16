@@ -10,6 +10,7 @@ import 'package:todo_app/ui/widgets/tm_app_bar.dart';
 
 class MainNavBarHolder extends StatefulWidget {
   const MainNavBarHolder({super.key});
+  static const name = "main_nav_bar_holder";
 
   @override
   State<MainNavBarHolder> createState() => _MainNavBarHolderState();

@@ -4,6 +4,7 @@ import 'package:todo_app/ui/widgets/top_status_card_widget.dart';
 
 class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({super.key});
+  static const name = "new_task_screen";
 
   @override
   State<NewTaskScreen> createState() => _NewTaskScreenState();

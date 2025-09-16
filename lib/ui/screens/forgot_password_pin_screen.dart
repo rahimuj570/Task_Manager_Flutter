@@ -7,6 +7,7 @@ import 'package:todo_app/ui/widgets/app_background.dart';
 
 class ForgotPasswordPinScreen extends StatefulWidget {
   const ForgotPasswordPinScreen({super.key});
+  static const name = "forgot_password";
 
   @override
   State<ForgotPasswordPinScreen> createState() =>

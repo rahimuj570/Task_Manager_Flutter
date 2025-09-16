@@ -9,7 +9,6 @@ class TaskManagerApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Task Manager',
-      home: SplashScreen(),
       theme: ThemeData(
         colorSchemeSeed: Colors.green,
         inputDecorationTheme: InputDecorationTheme(
@@ -32,6 +31,8 @@ class TaskManagerApp extends StatelessWidget {
           headlineMedium: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
+      routes: {'a': (_) => SplashScreen()},
+      initialRoute: 'a',
     );
   }
 }

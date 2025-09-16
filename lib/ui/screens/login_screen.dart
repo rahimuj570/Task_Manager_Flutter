@@ -7,6 +7,7 @@ import 'package:todo_app/ui/widgets/app_background.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+  static const name = "login";
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();

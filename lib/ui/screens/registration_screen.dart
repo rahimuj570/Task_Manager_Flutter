@@ -5,6 +5,7 @@ import 'package:todo_app/ui/widgets/app_background.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
+  static const name = "register";
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();

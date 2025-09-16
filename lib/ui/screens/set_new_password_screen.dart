@@ -6,7 +6,7 @@ import 'package:todo_app/ui/widgets/app_background.dart';
 
 class SetNewPasswordScreen extends StatefulWidget {
   const SetNewPasswordScreen({super.key});
-
+  static const name = "set_new_password";
   @override
   State<SetNewPasswordScreen> createState() => _SetNewPasswordScreenState();
 }

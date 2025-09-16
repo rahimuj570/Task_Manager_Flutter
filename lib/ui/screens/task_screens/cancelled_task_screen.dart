@@ -3,6 +3,7 @@ import 'package:todo_app/ui/widgets/task_tile_widget.dart';
 
 class CancelledTaskScreen extends StatefulWidget {
   const CancelledTaskScreen({super.key});
+  static const name = "cancelled_task_screen";
 
   @override
   State<CancelledTaskScreen> createState() => _CancelledTaskScreenState();

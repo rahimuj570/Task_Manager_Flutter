@@ -3,6 +3,7 @@ import 'package:todo_app/ui/widgets/task_tile_widget.dart';
 
 class ProgressTaskScreen extends StatefulWidget {
   const ProgressTaskScreen({super.key});
+  static const name = "progress_task_screen";
 
   @override
   State<ProgressTaskScreen> createState() => _ProgressTaskScreenState();
