@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/ui/screens/add_new_task_screen.dart';
+import 'package:todo_app/ui/screens/forgot_password_email_screen.dart';
+import 'package:todo_app/ui/screens/forgot_password_pin_screen.dart';
+import 'package:todo_app/ui/screens/login_screen.dart';
+import 'package:todo_app/ui/screens/registration_screen.dart';
 import 'package:todo_app/ui/screens/splash_screen.dart';
+import 'package:todo_app/ui/screens/task_screens/cancelled_task_screen.dart';
+import 'package:todo_app/ui/screens/task_screens/completed_task_screen.dart';
+import 'package:todo_app/ui/screens/task_screens/new_task_screen.dart';
+import 'package:todo_app/ui/screens/task_screens/progress_task_screen.dart';
 
 class TaskManagerApp extends StatelessWidget {
   const TaskManagerApp({super.key});
@@ -31,8 +40,19 @@ class TaskManagerApp extends StatelessWidget {
           headlineMedium: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
-      routes: {'a': (_) => SplashScreen()},
-      initialRoute: 'a',
+      routes: {
+        SplashScreen.name: (_) => SplashScreen(),
+        LoginScreen.name: (_) => LoginScreen(),
+        ForgotPasswordEmailScreen.name: (_) => ForgotPasswordEmailScreen(),
+        ForgotPasswordPinScreen.name: (_) => ForgotPasswordPinScreen(),
+        RegistrationScreen.name: (_) => RegistrationScreen(),
+        NewTaskScreen.name: (_) => NewTaskScreen(),
+        CompletedTaskScreen.name: (_) => CompletedTaskScreen(),
+        CancelledTaskScreen.name: (_) => CancelledTaskScreen(),
+        ProgressTaskScreen.name: (_) => ProgressTaskScreen(),
+        AddNewTaskScreen.name: (_) => AddNewTaskScreen(),
+      },
+      initialRoute: SplashScreen.name,
     );
   }
 }
