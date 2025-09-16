@@ -88,17 +88,14 @@ class _ForgotPasswordEmailScreenState extends State<ForgotPasswordEmailScreen> {
   }
 
   void _gotoLoginScreen() {
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushNamedAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      LoginScreen.name,
       (route) => false,
     );
   }
 
   void _gotoPinScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ForgotPasswordPinScreen()),
-    );
+    Navigator.pushNamed(context, ForgotPasswordPinScreen.name);
   }
 }

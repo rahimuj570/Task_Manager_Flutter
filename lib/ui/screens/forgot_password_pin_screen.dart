@@ -129,17 +129,17 @@ class _ForgotPasswordPinScreenState extends State<ForgotPasswordPinScreen> {
   }
 
   void _gotoLoginScreen() {
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushNamedAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      LoginScreen.name,
       (route) => false,
     );
   }
 
   void _verifyPin() {
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushNamedAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => SetNewPasswordScreen()),
+      SetNewPasswordScreen.name,
       (route) => false,
     );
   }

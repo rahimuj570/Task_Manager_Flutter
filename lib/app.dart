@@ -3,7 +3,9 @@ import 'package:todo_app/ui/screens/add_new_task_screen.dart';
 import 'package:todo_app/ui/screens/forgot_password_email_screen.dart';
 import 'package:todo_app/ui/screens/forgot_password_pin_screen.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
+import 'package:todo_app/ui/screens/main_nav_bar_holder.dart';
 import 'package:todo_app/ui/screens/registration_screen.dart';
+import 'package:todo_app/ui/screens/set_new_password_screen.dart';
 import 'package:todo_app/ui/screens/splash_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/cancelled_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/completed_task_screen.dart';
@@ -51,6 +53,8 @@ class TaskManagerApp extends StatelessWidget {
         CancelledTaskScreen.name: (_) => CancelledTaskScreen(),
         ProgressTaskScreen.name: (_) => ProgressTaskScreen(),
         AddNewTaskScreen.name: (_) => AddNewTaskScreen(),
+        SetNewPasswordScreen.name: (_) => SetNewPasswordScreen(),
+        MainNavBarHolder.name: (_) => MainNavBarHolder(),
       },
       initialRoute: SplashScreen.name,
     );

@@ -92,24 +92,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _gotoRegistrationScreen() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => RegistrationScreen()),
-    );
+    Navigator.pushReplacementNamed(context, RegistrationScreen.name);
   }
 
   void _gotoForgotPasswordEmailScreen() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => ForgotPasswordEmailScreen()),
-    );
+    Navigator.pushReplacementNamed(context, ForgotPasswordEmailScreen.name);
   }
 
   void _loginCheck() {
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushNamedAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => MainNavBarHolder()),
-      (route) => false,
+      MainNavBarHolder.name,
+      (predicate) => false,
     );
   }
 }
