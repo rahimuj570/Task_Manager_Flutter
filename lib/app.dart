@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/ui/screens/add_new_task_screen.dart';
+import 'package:todo_app/ui/screens/edit_profile_screen.dart';
 import 'package:todo_app/ui/screens/forgot_password_email_screen.dart';
 import 'package:todo_app/ui/screens/forgot_password_pin_screen.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
@@ -55,6 +56,7 @@ class TaskManagerApp extends StatelessWidget {
         AddNewTaskScreen.name: (_) => AddNewTaskScreen(),
         SetNewPasswordScreen.name: (_) => SetNewPasswordScreen(),
         MainNavBarHolder.name: (_) => MainNavBarHolder(),
+        EditProfileScreen.name: (_) => EditProfileScreen(),
       },
       initialRoute: SplashScreen.name,
     );
