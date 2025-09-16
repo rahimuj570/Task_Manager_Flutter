@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 import 'package:todo_app/ui/widgets/tm_app_bar.dart';
 
@@ -10,7 +12,12 @@ class EditProfileScreen extends StatefulWidget {
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
+ImagePicker _imagePicker = ImagePicker();
+String _photoPlaceholder = "No Photo Selected";
+
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  // ImagePicker imagePicker = imagePicker();
+  XFile? photo;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,36 +41,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       child: Column(
                         spacing: 10,
                         children: [
-                          Container(
-                            height: 40,
-                            decoration: BoxDecoration(color: Colors.white),
-                            child: Row(
-                              spacing: 8,
-                              children: [
-                                Container(
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(4),
-                                      bottomLeft: Radius.circular(4),
+                          GestureDetector(
+                            onTap: _getImage,
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(color: Colors.white),
+                              child: Row(
+                                spacing: 8,
+                                children: [
+                                  Container(
+                                    width: 80,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(4),
+                                        bottomLeft: Radius.circular(4),
+                                      ),
+                                      color: Colors.black54,
                                     ),
-                                    color: Colors.black54,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "Photos",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
+                                    child: Center(
+                                      child: Text(
+                                        "Photos",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Text(
-                                  "No Photo Selected",
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ],
+                                  Expanded(
+                                    child: Text(
+                                      maxLines: 1,
+
+                                      _photoPlaceholder,
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           TextField(
@@ -99,5 +116,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _getImage() async {
+    photo = await _imagePicker.pickImage(source: ImageSource.gallery);
+    if (photo != null) {
+      setState(() {
+        _photoPlaceholder = photo!.name;
+      });
+    }
   }
 }
