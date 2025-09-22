@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/data/utils/email_validator.dart';
 import 'package:todo_app/ui/screens/forgot_password_email_screen.dart';
 import 'package:todo_app/ui/screens/main_nav_bar_holder.dart';
 import 'package:todo_app/ui/screens/registration_screen.dart';
@@ -14,6 +15,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController emailTEC = TextEditingController();
+  TextEditingController passwordTEC = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,18 +37,34 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: 10),
                   Form(
+                    key: _formKey,
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: emailTEC,
                           decoration: InputDecoration(label: Text("Email")),
+                          validator: (value) =>
+                              EmailValidator.emailValidator(value!.trim()) ==
+                                  true
+                              ? null
+                              : "Invalid Email",
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                         SizedBox(height: 8),
                         TextFormField(
+                          controller: passwordTEC,
                           decoration: InputDecoration(label: Text("Password")),
+                          validator: (value) =>
+                              _nullInputValidator(value, isPassword: true),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                         SizedBox(height: 12),
                         FilledButton(
-                          onPressed: _loginCheck,
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _loginCheck();
+                            }
+                          },
                           child: Icon(Icons.arrow_circle_right_outlined),
                         ),
                       ],
@@ -105,5 +126,16 @@ class _LoginScreenState extends State<LoginScreen> {
       MainNavBarHolder.name,
       (predicate) => false,
     );
+  }
+
+  String? _nullInputValidator(String? value, {bool? isPassword}) {
+    if (value?.trim().isEmpty ?? true) {
+      return "Input should be filled";
+    } else if (isPassword != null) {
+      if (value!.trim().length < 7) {
+        return "Password length must be mor than 6";
+      }
+    }
+    return null;
   }
 }
