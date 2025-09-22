@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/email_validator.dart';
+import 'package:todo_app/data/utils/urls.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
+import 'package:todo_app/ui/widgets/show_toast.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -23,6 +28,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController mobileTEC = TextEditingController();
   TextEditingController passwordTEC = TextEditingController();
 
+  bool isProcessing = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +51,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: emailTEC,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(label: Text("Email")),
                           validator: (value) {
@@ -62,6 +69,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                         SizedBox(height: 8),
                         TextFormField(
+                          controller: firstNameTEC,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
                             label: Text("First Name"),
@@ -72,6 +80,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                         SizedBox(height: 8),
                         TextFormField(
+                          controller: lastNameTEC,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(label: Text("Last Name")),
                           validator: (value) => _nullInputValidator(value),
@@ -80,6 +89,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                         SizedBox(height: 8),
                         TextFormField(
+                          controller: mobileTEC,
+                          keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(label: Text("Mobile")),
                           validator: (value) => _nullInputValidator(value),
@@ -87,17 +98,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         SizedBox(height: 8),
                         TextFormField(
+                          controller: passwordTEC,
                           textInputAction: TextInputAction.done,
                           decoration: InputDecoration(label: Text("Password")),
-                          validator: (value) => _nullInputValidator(value),
+                          validator: (value) =>
+                              _nullInputValidator(value, isPassword: true),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                         SizedBox(height: 12),
-                        FilledButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {}
-                          },
-                          child: Icon(Icons.arrow_circle_right_outlined),
+                        Visibility(
+                          visible: !isProcessing,
+                          child: FilledButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _registrationUser();
+                              }
+                            },
+                            child: Icon(Icons.arrow_circle_right_outlined),
+                          ),
                         ),
                       ],
                     ),
@@ -131,6 +149,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ),
           ),
+          Visibility(
+            visible: isProcessing,
+            child: Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -147,13 +176,48 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     super.dispose();
   }
 
+  Future<void> _registrationUser() async {
+    Map<String, dynamic> body = {
+      "email": emailTEC.text,
+      "firstName": firstNameTEC.text,
+      "lastName": lastNameTEC.text,
+      "mobile": mobileTEC.text,
+      "password": passwordTEC.text,
+    };
+    setState(() {
+      isProcessing = !isProcessing;
+    });
+    ApiResponse apiResponse = await ApiCalller.postRequest(
+      url: Urls.userRegistration,
+      body: body,
+    );
+    setState(() {
+      isProcessing = !isProcessing;
+    });
+    if (apiResponse.responseData['status'] == 'fail') {
+      showSnackBar(context, apiResponse.responseData['data'], ToastType.error);
+    } else {
+      showSnackBar(
+        context,
+        "Registration completed successfully!",
+        ToastType.success,
+      );
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.pushReplacementNamed(context, LoginScreen.name);
+    }
+  }
+
   void _gotoLoginScreen() {
     Navigator.pushReplacementNamed(context, LoginScreen.name);
   }
 
-  String? _nullInputValidator(String? value) {
+  String? _nullInputValidator(String? value, {bool? isPassword}) {
     if (value?.trim().isEmpty ?? true) {
       return "Input should be filled";
+    } else if (isPassword != null) {
+      if (value!.trim().length < 7) {
+        return "Password length must be mor than 6";
+      }
     }
     return null;
   }

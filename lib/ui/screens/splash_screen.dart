@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Center(child: SvgPicture.asset(AssetsPathUtil.logoSvg, height: 35)),
           Align(
             alignment: Alignment(0, .8),
-            child: CircularProgressIndicator(color: Colors.green),
+            child: CircularProgressIndicator(strokeWidth: 5),
           ),
           Align(
             alignment: Alignment(0, .98),

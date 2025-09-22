@@ -23,6 +23,11 @@ class TaskManagerApp extends StatelessWidget {
       title: 'Task Manager',
       theme: ThemeData(
         colorSchemeSeed: Colors.green,
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: Colors.green,
+          strokeWidth: 8,
+        ),
+
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
           border: OutlineInputBorder(borderSide: BorderSide.none),

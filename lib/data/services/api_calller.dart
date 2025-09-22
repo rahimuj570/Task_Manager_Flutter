@@ -45,7 +45,7 @@ class ApiCalller {
       Response response = await post(
         uri,
         headers: {'content-type': 'application/json'},
-        body: body,
+        body: jsonEncode(body),
       );
       _responseLogger(url, response.statusCode, response);
       if (response.statusCode == 200 || response.statusCode == 201) {
