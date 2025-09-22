@@ -23,6 +23,7 @@ class ApiCalller {
           isuccess: false,
           statusCode: response.statusCode,
           responseData: jsonDecode(response.body),
+          errorMessage: jsonDecode(response.body)['data'],
         );
       }
     } on Exception catch (e) {
@@ -59,6 +60,7 @@ class ApiCalller {
           isuccess: false,
           statusCode: response.statusCode,
           responseData: jsonDecode(response.body),
+          errorMessage: jsonDecode(response.body)['data'],
         );
       }
     } on Exception catch (e) {

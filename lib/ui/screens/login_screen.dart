@@ -1,10 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/email_validator.dart';
+import 'package:todo_app/data/utils/urls.dart';
 import 'package:todo_app/ui/screens/forgot_password_email_screen.dart';
 import 'package:todo_app/ui/screens/main_nav_bar_holder.dart';
 import 'package:todo_app/ui/screens/registration_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
+import 'package:todo_app/ui/widgets/show_toast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController emailTEC = TextEditingController();
   TextEditingController passwordTEC = TextEditingController();
-
+  bool isProcessing = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         TextFormField(
+                          textInputAction: TextInputAction.next,
                           controller: emailTEC,
                           decoration: InputDecoration(label: Text("Email")),
                           validator: (value) =>
@@ -52,6 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 8),
                         TextFormField(
+                          textInputAction: TextInputAction.done,
                           controller: passwordTEC,
                           decoration: InputDecoration(label: Text("Password")),
                           validator: (value) =>
@@ -59,13 +64,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                         SizedBox(height: 12),
-                        FilledButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _loginCheck();
-                            }
-                          },
-                          child: Icon(Icons.arrow_circle_right_outlined),
+                        Visibility(
+                          visible: !isProcessing,
+                          replacement: CircularProgressIndicator(
+                            strokeWidth: 5,
+                          ),
+                          child: FilledButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _loginCheck();
+                              }
+                            },
+                            child: Icon(Icons.arrow_circle_right_outlined),
+                          ),
                         ),
                       ],
                     ),
@@ -120,12 +131,31 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushReplacementNamed(context, ForgotPasswordEmailScreen.name);
   }
 
-  void _loginCheck() {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      MainNavBarHolder.name,
-      (predicate) => false,
+  Future<void> _loginCheck() async {
+    setState(() {
+      isProcessing = !isProcessing;
+    });
+    Map<String, dynamic> body = {
+      "email": emailTEC.text.trim(),
+      "password": passwordTEC.text.trim(),
+    };
+    ApiResponse apiResponse = await ApiCalller.postRequest(
+      url: Urls.userLogin,
+      body: body,
     );
+    setState(() {
+      isProcessing = !isProcessing;
+    });
+    if (apiResponse.statusCode == 200 &&
+        apiResponse.responseData['status'] == 'success') {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        MainNavBarHolder.name,
+        (predicate) => false,
+      );
+    } else {
+      showSnackBar(context, apiResponse.errorMessage!, ToastType.error);
+    }
   }
 
   String? _nullInputValidator(String? value, {bool? isPassword}) {
