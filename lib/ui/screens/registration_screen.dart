@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:todo_app/data/utils/email_validator.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 
@@ -12,6 +14,15 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  //Contrllers
+  TextEditingController emailTEC = TextEditingController();
+  TextEditingController firstNameTEC = TextEditingController();
+  TextEditingController lastNameTEC = TextEditingController();
+  TextEditingController mobileTEC = TextEditingController();
+  TextEditingController passwordTEC = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,35 +41,62 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   SizedBox(height: 10),
                   Form(
+                    key: _formKey,
                     child: Column(
                       children: [
                         TextFormField(
+                          textInputAction: TextInputAction.next,
                           decoration: InputDecoration(label: Text("Email")),
+                          validator: (value) {
+                            if (value!.trim().isEmpty) {
+                              return "Input Email";
+                            } else if (!EmailValidator.emailValidator(
+                              value.trim(),
+                            )) {
+                              return "Invalid Email!";
+                            }
+                            return null;
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
 
                         SizedBox(height: 8),
                         TextFormField(
+                          textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
                             label: Text("First Name"),
                           ),
+                          validator: (value) => _nullInputValidator(value),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
 
                         SizedBox(height: 8),
                         TextFormField(
+                          textInputAction: TextInputAction.next,
                           decoration: InputDecoration(label: Text("Last Name")),
+                          validator: (value) => _nullInputValidator(value),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
 
                         SizedBox(height: 8),
                         TextFormField(
+                          textInputAction: TextInputAction.next,
                           decoration: InputDecoration(label: Text("Mobile")),
+                          validator: (value) => _nullInputValidator(value),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                         SizedBox(height: 8),
                         TextFormField(
+                          textInputAction: TextInputAction.done,
                           decoration: InputDecoration(label: Text("Password")),
+                          validator: (value) => _nullInputValidator(value),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                         SizedBox(height: 12),
                         FilledButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {}
+                          },
                           child: Icon(Icons.arrow_circle_right_outlined),
                         ),
                       ],
@@ -98,7 +136,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    emailTEC.dispose();
+    firstNameTEC.dispose();
+    lastNameTEC.dispose();
+    mobileTEC.dispose();
+    passwordTEC.dispose();
+    super.dispose();
+  }
+
   void _gotoLoginScreen() {
     Navigator.pushReplacementNamed(context, LoginScreen.name);
+  }
+
+  String? _nullInputValidator(String? value) {
+    if (value?.trim().isEmpty ?? true) {
+      return "Input should be filled";
+    }
+    return null;
   }
 }

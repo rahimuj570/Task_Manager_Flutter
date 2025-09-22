@@ -28,6 +28,9 @@ class TaskManagerApp extends StatelessWidget {
           border: OutlineInputBorder(borderSide: BorderSide.none),
           fillColor: Colors.white,
           filled: true,
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+          ),
         ),
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
