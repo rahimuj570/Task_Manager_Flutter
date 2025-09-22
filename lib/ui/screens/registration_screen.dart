@@ -204,6 +204,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       );
       await Future.delayed(Duration(seconds: 2));
       Navigator.pushReplacementNamed(context, LoginScreen.name);
+      emailTEC.clear();
+      firstNameTEC.clear();
+      lastNameTEC.clear();
+      mobileTEC.clear();
+      passwordTEC.clear();
     }
   }
 
