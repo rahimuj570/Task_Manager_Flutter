@@ -4,13 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/data/models/user_model.dart';
 
 class AuthController {
-  final String _tokenKey = 'token';
-  final String _userDataKey = 'userData';
+  static const String _tokenKey = 'token';
+  static const String _userDataKey = 'userData';
 
   static UserModel? userModel;
   static String? userToken;
 
-  Future<void> saveUserData(UserModel model, String token) async {
+  static Future<void> saveUserData(UserModel model, String token) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     await sp.setString(_tokenKey, token);
     await sp.setString(_userDataKey, jsonEncode(UserModel.toJson(model)));
@@ -18,7 +18,7 @@ class AuthController {
     userToken = token;
   }
 
-  Future<void> getUserData() async {
+  static Future<void> getUserData() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String? token = sp.getString(_tokenKey);
     if (token != null) {
