@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/ui/controllers/auth_controller.dart';
 import 'package:todo_app/ui/screens/edit_profile_screen.dart';
+import 'package:todo_app/ui/screens/login_screen.dart';
 
-class TmAppBar extends StatelessWidget implements PreferredSizeWidget {
+class TmAppBar extends StatefulWidget implements PreferredSizeWidget {
   const TmAppBar({super.key});
 
+  @override
+  State<TmAppBar> createState() => _TmAppBarState();
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class _TmAppBarState extends State<TmAppBar> {
   @override
   Widget build(BuildContext context) {
     void _gotoEditProfile() {
@@ -49,12 +60,17 @@ class TmAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      actions: [IconButton(onPressed: () {}, icon: Icon(Icons.logout))],
+      actions: [IconButton(onPressed: _logout, icon: Icon(Icons.logout))],
       foregroundColor: Colors.white,
     );
   }
 
-  @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Future<void> _logout() async {
+    await AuthController.removeLoggedin();
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      LoginScreen.name,
+      (predicate) => true,
+    );
+  }
 }

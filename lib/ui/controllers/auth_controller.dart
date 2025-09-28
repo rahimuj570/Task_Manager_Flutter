@@ -35,4 +35,11 @@ class AuthController {
     SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.getString(_tokenKey) != null;
   }
+
+  static Future<void> removeLoggedin() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    await sp.clear();
+    userModel = null;
+    userToken = null;
+  }
 }
