@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:todo_app/ui/controllers/auth_controller.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
+import 'package:todo_app/ui/screens/main_nav_bar_holder.dart';
 import 'package:todo_app/ui/utils/assets_path_util.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 
@@ -44,6 +46,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _gotoNext() async {
     await Future.delayed(Duration(seconds: 3));
-    Navigator.pushReplacementNamed(context, LoginScreen.name);
+    if (await AuthController.checkLoggedin()) {
+      await AuthController.getUserData();
+      Navigator.pushReplacementNamed(context, MainNavBarHolder.name);
+    } else {
+      Navigator.pushReplacementNamed(context, LoginScreen.name);
+    }
   }
 }

@@ -30,4 +30,9 @@ class AuthController {
       userToken = token;
     }
   }
+
+  static Future<bool> checkLoggedin() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.getString(_tokenKey) != null;
+  }
 }
