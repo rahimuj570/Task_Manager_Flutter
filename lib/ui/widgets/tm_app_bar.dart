@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/ui/screens/edit_profile_screen.dart';
-import 'package:todo_app/ui/screens/registration_screen.dart';
 
 class TmAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TmAppBar({super.key});
