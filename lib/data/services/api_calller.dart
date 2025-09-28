@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
+import 'package:todo_app/ui/controllers/auth_controller.dart';
 
 class ApiCalller {
   static final Logger _log = Logger();
@@ -10,7 +11,10 @@ class ApiCalller {
     try {
       Uri uri = Uri.parse(url);
       _requestLogger(url);
-      Response response = await get(uri);
+      Response response = await get(
+        uri,
+        headers: {'token': AuthController.userToken ?? ""},
+      );
       _responseLogger(url, response.statusCode, response);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return ApiResponse(
@@ -45,7 +49,10 @@ class ApiCalller {
       _requestLogger(url, body: body);
       Response response = await post(
         uri,
-        headers: {'content-type': 'application/json'},
+        headers: {
+          'content-type': 'application/json',
+          'token': AuthController.userToken ?? '',
+        },
         body: jsonEncode(body),
       );
       _responseLogger(url, response.statusCode, response);
