@@ -21,6 +21,9 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
             child: Material(
               child: ListView.separated(
                 itemBuilder: (context, index) => TaskTileWidget(
+                  title: '',
+                  description: '',
+                  createdDate: '',
                   statusColor: Colors.green,
                   status: 'completed',
                   deleteFunc: (int id) => () {

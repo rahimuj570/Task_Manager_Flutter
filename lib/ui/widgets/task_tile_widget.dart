@@ -7,19 +7,25 @@ class TaskTileWidget extends StatelessWidget {
     required this.editFunc,
     required this.status,
     required this.statusColor,
+    required this.title,
+    required this.description,
+    required this.createdDate,
   });
 
   final String status;
   final Function(int) deleteFunc;
   final Function(int) editFunc;
   final Color statusColor;
+  final String title;
+  final String description;
+  final String createdDate;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       tileColor: Colors.white,
       title: Text(
-        "data",
+        title,
         style: Theme.of(
           context,
         ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
@@ -27,13 +33,10 @@ class TaskTileWidget extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "sssssss s  s s  s s  s s",
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
           SizedBox(height: 8),
           Text(
-            "02/9/2025",
+            createdDate,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               fontWeight: FontWeight.w800,
               fontSize: 10,

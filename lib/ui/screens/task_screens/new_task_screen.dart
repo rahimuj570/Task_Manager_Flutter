@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/data/models/task_model.dart';
 import 'package:todo_app/data/models/task_status_count_model.dart';
 import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/urls.dart';
-import 'package:todo_app/ui/controllers/auth_controller.dart';
 import 'package:todo_app/ui/widgets/task_tile_widget.dart';
 import 'package:todo_app/ui/widgets/top_status_card_widget.dart';
 
@@ -15,7 +15,6 @@ class NewTaskScreen extends StatefulWidget {
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
-  final ScrollController _scrollController = ScrollController();
   bool isCounting = false;
   Map<String, dynamic> _taskCount = {};
 
@@ -37,15 +36,36 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     setState(() {});
   }
 
+  bool isFatching = false;
+  final List<TaskModel> _newTaskList = [];
+
+  Future<void> getNewTodo() async {
+    isFatching = !isFatching;
+    setState(() {});
+    ApiResponse apiResponse = await ApiCalller.getRequest(url: Urls.getNewTodo);
+
+    if (apiResponse.isuccess == true) {
+      for (Map<String, dynamic> t in apiResponse.responseData['data']) {
+        TaskModel temp = TaskModel.fromJson(t);
+        _newTaskList.add(temp);
+      }
+    }
+
+    isFatching = !isFatching;
+    setState(() {});
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getTodoStatusCount();
+    getNewTodo();
   }
 
   @override
   Widget build(BuildContext context) {
+    // getNewTodo();
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
       child: Column(
@@ -85,27 +105,40 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             ),
           ),
           SizedBox(height: 10),
-          Expanded(
-            child: Material(
-              child: ListView.separated(
-                controller: _scrollController,
-                itemBuilder: (context, index) {
-                  if (index == 9) {
-                    print(index);
-                    return SizedBox(height: 70);
-                  }
-                  return TaskTileWidget(
-                    statusColor: Colors.cyan,
-                    status: 'new',
-                    deleteFunc: (int id) =>
-                        () => _deleteFunc(id),
+          Visibility(
+            visible: !isFatching,
+            replacement: Expanded(
+              child: Center(
+                child: SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: CircularProgressIndicator(strokeWidth: 5),
+                ),
+              ),
+            ),
+            child: Expanded(
+              child: Material(
+                child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    if (index == _newTaskList.length - 1) {
+                      return SizedBox(height: 70);
+                    }
+                    return TaskTileWidget(
+                      createdDate: _newTaskList[index].createdDate,
+                      title: _newTaskList[index].title,
+                      description: _newTaskList[index].description,
+                      statusColor: Colors.cyan,
+                      status: 'new',
+                      deleteFunc: (int id) =>
+                          () => _deleteFunc(id),
 
-                    editFunc: (int id) =>
-                        () => _editFunc(id),
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(height: 5),
-                itemCount: 10,
+                      editFunc: (int id) =>
+                          () => _editFunc(id),
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(height: 5),
+                  itemCount: _newTaskList.length,
+                ),
               ),
             ),
           ),

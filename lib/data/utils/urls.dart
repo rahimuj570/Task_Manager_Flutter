@@ -5,4 +5,5 @@ class Urls {
 
   static String createTodo = "$_base/createTask";
   static String getTodoCount = "$_base/taskStatusCount";
+  static String getNewTodo = "$_base/listTaskByStatus/New";
 }

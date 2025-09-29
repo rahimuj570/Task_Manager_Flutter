@@ -57,7 +57,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             if (value!.trim() == "") {
                               return "Must input a todo subject";
                             }
-                            return '';
+                            return null;
                           },
                           autovalidateMode: AutovalidateMode.onUnfocus,
                         ),
@@ -74,7 +74,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             if (value!.trim() == "") {
                               return "Must fill the decription of todo!";
                             }
-                            return '';
+                            return null;
                           },
                           autovalidateMode: AutovalidateMode.onUnfocus,
                         ),

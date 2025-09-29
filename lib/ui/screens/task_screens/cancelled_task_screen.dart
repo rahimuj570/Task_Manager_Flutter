@@ -21,6 +21,9 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
             child: Material(
               child: ListView.separated(
                 itemBuilder: (context, index) => TaskTileWidget(
+                  title: '',
+                  description: '',
+                  createdDate: '',
                   statusColor: Colors.red,
                   status: 'cancelled',
                   deleteFunc: (int id) => () {

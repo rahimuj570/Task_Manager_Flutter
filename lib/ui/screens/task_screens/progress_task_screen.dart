@@ -22,6 +22,9 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
               child: ListView.separated(
                 itemBuilder: (context, index) => TaskTileWidget(
                   statusColor: Colors.purpleAccent,
+                  title: '',
+                  description: '',
+                  createdDate: '',
                   status: 'progress',
                   deleteFunc: (int id) => () {
                     print('object');
