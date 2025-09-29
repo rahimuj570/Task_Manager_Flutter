@@ -9,6 +9,8 @@ class AuthController {
 
   static UserModel? userModel;
   static String? userToken;
+  static String? fullName =
+      "${userModel?.firstName ?? "Md."} ${userModel?.lastName ?? "Rahimujjaman"}";
 
   static Future<void> saveUserData(UserModel model, String token) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
