@@ -4,4 +4,5 @@ class Urls {
   static String userLogin = "$_base/Login";
 
   static String createTodo = "$_base/createTask";
+  static String getTodoCount = "$_base/taskStatusCount";
 }
