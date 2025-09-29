@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
+import 'package:todo_app/app.dart';
 import 'package:todo_app/ui/controllers/auth_controller.dart';
+import 'package:todo_app/ui/screens/login_screen.dart';
 
 class ApiCalller {
   static final Logger _log = Logger();
@@ -21,6 +24,13 @@ class ApiCalller {
           isuccess: true,
           statusCode: response.statusCode,
           responseData: jsonDecode(response.body),
+        );
+      } else if (response.statusCode == 401) {
+        await _gotoLogin();
+        return ApiResponse(
+          isuccess: false,
+          statusCode: response.statusCode,
+          responseData: jsonDecode(response.body)['status'],
         );
       } else {
         return ApiResponse(
@@ -62,6 +72,13 @@ class ApiCalller {
           statusCode: response.statusCode,
           responseData: jsonDecode(response.body),
         );
+      } else if (response.statusCode == 401) {
+        await _gotoLogin();
+        return ApiResponse(
+          isuccess: false,
+          statusCode: response.statusCode,
+          responseData: jsonDecode(response.body)['status'],
+        );
       } else {
         return ApiResponse(
           isuccess: false,
@@ -92,6 +109,15 @@ class ApiCalller {
       "URL=> $url\n"
       "StatusCode=> ${response.statusCode}"
       "body=> ${response.body}",
+    );
+  }
+
+  static Future<void> _gotoLogin() async {
+    await AuthController.removeLoggedin();
+    Navigator.pushNamedAndRemoveUntil(
+      TaskManagerApp.appContext.currentContext!,
+      LoginScreen.name,
+      (predicate) => false,
     );
   }
 }

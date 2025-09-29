@@ -16,9 +16,12 @@ import 'package:todo_app/ui/screens/task_screens/progress_task_screen.dart';
 class TaskManagerApp extends StatelessWidget {
   const TaskManagerApp({super.key});
 
+  static GlobalKey<NavigatorState> appContext = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: appContext,
       debugShowCheckedModeBanner: false,
       title: 'Task Manager',
       theme: ThemeData(

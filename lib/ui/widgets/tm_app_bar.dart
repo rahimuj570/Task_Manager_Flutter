@@ -15,14 +15,14 @@ class TmAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _TmAppBarState extends State<TmAppBar> {
+  void _gotoEditProfile() {
+    if (ModalRoute.of(context)?.settings.name != EditProfileScreen.name) {
+      Navigator.pushNamed(context, EditProfileScreen.name);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    void _gotoEditProfile() {
-      if (ModalRoute.of(context)?.settings.name != EditProfileScreen.name) {
-        Navigator.pushNamed(context, EditProfileScreen.name);
-      }
-    }
-
     return AppBar(
       leadingWidth: 30,
       backgroundColor: Colors.green,
