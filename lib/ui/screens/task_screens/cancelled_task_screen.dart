@@ -24,6 +24,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
             child: Material(
               child: ListView.separated(
                 itemBuilder: (context, index) => TaskTileWidget(
+                  reFetch: () {},
                   tm: _canceledTaskList[index],
                   statusColor: Colors.red,
                   status: TaskStatus.Cancelled,

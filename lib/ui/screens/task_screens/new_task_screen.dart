@@ -41,9 +41,12 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   final List<TaskModel> _newTaskList = [];
 
   Future<void> getNewTodo() async {
+    _newTaskList.clear();
     isFatching = !isFatching;
     setState(() {});
-    ApiResponse apiResponse = await ApiCalller.getRequest(url: Urls.getNewTodo);
+    ApiResponse apiResponse = await ApiCalller.getRequest(
+      url: Urls.getTodoList(TaskStatus.New.name),
+    );
 
     if (apiResponse.isuccess == true) {
       for (Map<String, dynamic> t in apiResponse.responseData['data']) {
@@ -125,6 +128,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       return SizedBox(height: 70);
                     }
                     return TaskTileWidget(
+                      reFetch: getNewTodo,
                       tm: _newTaskList[index],
                       statusColor: Colors.cyan,
                       status: TaskStatus.New,

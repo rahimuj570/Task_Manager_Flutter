@@ -24,6 +24,7 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
             child: Material(
               child: ListView.separated(
                 itemBuilder: (context, index) => TaskTileWidget(
+                  reFetch: () {},
                   statusColor: Colors.green,
                   status: TaskStatus.Completed,
                   tm: _completedTaskList[index],
