@@ -17,7 +17,7 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
   bool isFatching = false;
   final List<TaskModel> _cancelledTaskList = [];
 
-  Future<void> getCompletedTodo() async {
+  Future<void> getCancelledTodo() async {
     _cancelledTaskList.clear();
     isFatching = !isFatching;
     setState(() {});
@@ -40,7 +40,7 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCompletedTodo();
+    getCancelledTodo();
   }
 
   @override
@@ -77,7 +77,7 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
                   ),
                   child: ListView.separated(
                     itemBuilder: (context, index) => TaskTileWidget(
-                      reFetch: getCompletedTodo,
+                      reFetch: getCancelledTodo,
                       statusColor: Colors.purple,
                       status: TaskStatus.Progress,
                       tm: _cancelledTaskList[index],
