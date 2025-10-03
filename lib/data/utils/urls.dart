@@ -11,4 +11,6 @@ class Urls {
     required String todoId,
     required String status,
   }) => "$_base/updateTaskStatus/$todoId/$status";
+
+  static String deleteTaskById(String taskId) => "$_base/deleteTask/$taskId";
 }

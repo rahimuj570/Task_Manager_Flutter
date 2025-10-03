@@ -27,6 +27,7 @@ class TaskTileWidget extends StatefulWidget {
 
 class _TaskTileWidgetState extends State<TaskTileWidget> {
   bool isUpdating = false;
+  bool isDeleting = false;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -118,13 +119,24 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                    iconSize: 20,
-                    onPressed: null,
-                    icon: Icon(Icons.delete),
-                    disabledColor: Colors.red,
+                  Visibility(
+                    visible: !isDeleting,
+                    replacement: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        color: Colors.red,
+                      ),
+                    ),
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints(),
+                      iconSize: 20,
+                      onPressed: deleteTask,
+                      icon: Icon(Icons.delete),
+                      color: Colors.red,
+                    ),
                   ),
                 ],
               ),
@@ -156,6 +168,24 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
     }
     setState(() {
       isUpdating = !isUpdating;
+    });
+  }
+
+  Future<void> deleteTask() async {
+    setState(() {
+      isDeleting = true;
+    });
+    ApiResponse apiResponse = await ApiCalller.getRequest(
+      url: Urls.deleteTaskById(widget.tm.id),
+    );
+    if (apiResponse.isuccess) {
+      showSnackBar(context, "Successfully Deleted", ToastType.success);
+      widget.reFetch();
+    } else {
+      showSnackBar(context, "Failed to deletes", ToastType.error);
+    }
+    setState(() {
+      isDeleting = false;
     });
   }
 }
