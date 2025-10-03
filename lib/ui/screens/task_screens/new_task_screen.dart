@@ -3,6 +3,7 @@ import 'package:todo_app/data/models/task_model.dart';
 import 'package:todo_app/data/models/task_status_count_model.dart';
 import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/urls.dart';
+import 'package:todo_app/ui/utils/task_status.dart';
 import 'package:todo_app/ui/widgets/task_tile_widget.dart';
 import 'package:todo_app/ui/widgets/top_status_card_widget.dart';
 
@@ -124,16 +125,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       return SizedBox(height: 70);
                     }
                     return TaskTileWidget(
-                      createdDate: _newTaskList[index].createdDate,
-                      title: _newTaskList[index].title,
-                      description: _newTaskList[index].description,
+                      tm: _newTaskList[index],
                       statusColor: Colors.cyan,
-                      status: 'new',
-                      deleteFunc: (int id) =>
-                          () => _deleteFunc(id),
-
-                      editFunc: (int id) =>
-                          () => _editFunc(id),
+                      status: TaskStatus.New,
                     );
                   },
                   separatorBuilder: (context, index) => SizedBox(height: 5),
@@ -152,6 +146,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   void _deleteFunc(int i) {
-    print("del");
+    PopupMenuButton(
+      itemBuilder: (context) => [PopupMenuItem(child: Text('data'))],
+    );
   }
 }

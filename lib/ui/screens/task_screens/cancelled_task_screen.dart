@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/data/models/task_model.dart';
+import 'package:todo_app/ui/utils/task_status.dart';
 import 'package:todo_app/ui/widgets/task_tile_widget.dart';
 
 class CancelledTaskScreen extends StatefulWidget {
@@ -10,6 +12,7 @@ class CancelledTaskScreen extends StatefulWidget {
 }
 
 class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
+  final List<TaskModel> _canceledTaskList = [];
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,18 +24,12 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
             child: Material(
               child: ListView.separated(
                 itemBuilder: (context, index) => TaskTileWidget(
-                  title: '',
-                  description: '',
-                  createdDate: '',
+                  tm: _canceledTaskList[index],
                   statusColor: Colors.red,
-                  status: 'cancelled',
-                  deleteFunc: (int id) => () {
-                    print('object');
-                  },
-                  editFunc: (int id) => () {},
+                  status: TaskStatus.Cancelled,
                 ),
                 separatorBuilder: (context, index) => SizedBox(height: 5),
-                itemCount: 10,
+                itemCount: _canceledTaskList.length,
               ),
             ),
           ),

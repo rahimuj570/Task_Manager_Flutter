@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/data/models/task_model.dart';
+import 'package:todo_app/ui/utils/task_status.dart';
 import 'package:todo_app/ui/widgets/task_tile_widget.dart';
 
 class ProgressTaskScreen extends StatefulWidget {
@@ -10,6 +12,7 @@ class ProgressTaskScreen extends StatefulWidget {
 }
 
 class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
+  final List<TaskModel> _progressTaskList = [];
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -22,17 +25,11 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
               child: ListView.separated(
                 itemBuilder: (context, index) => TaskTileWidget(
                   statusColor: Colors.purpleAccent,
-                  title: '',
-                  description: '',
-                  createdDate: '',
-                  status: 'progress',
-                  deleteFunc: (int id) => () {
-                    print('object');
-                  },
-                  editFunc: (int id) => () {},
+                  tm: _progressTaskList[index],
+                  status: TaskStatus.Progress,
                 ),
                 separatorBuilder: (context, index) => SizedBox(height: 5),
-                itemCount: 10,
+                itemCount: _progressTaskList.length,
               ),
             ),
           ),

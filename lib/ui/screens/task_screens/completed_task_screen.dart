@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/data/models/task_model.dart';
+import 'package:todo_app/ui/utils/task_status.dart';
 import 'package:todo_app/ui/widgets/task_tile_widget.dart';
 
 class CompletedTaskScreen extends StatefulWidget {
@@ -10,6 +12,7 @@ class CompletedTaskScreen extends StatefulWidget {
 }
 
 class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
+  final List<TaskModel> _completedTaskList = [];
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,18 +24,12 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
             child: Material(
               child: ListView.separated(
                 itemBuilder: (context, index) => TaskTileWidget(
-                  title: '',
-                  description: '',
-                  createdDate: '',
                   statusColor: Colors.green,
-                  status: 'completed',
-                  deleteFunc: (int id) => () {
-                    print('object');
-                  },
-                  editFunc: (int id) => () {},
+                  status: TaskStatus.Completed,
+                  tm: _completedTaskList[index],
                 ),
                 separatorBuilder: (context, index) => SizedBox(height: 5),
-                itemCount: 10,
+                itemCount: _completedTaskList.length,
               ),
             ),
           ),
