@@ -144,14 +144,4 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       ),
     );
   }
-
-  void _editFunc(int i) {
-    print("ed");
-  }
-
-  void _deleteFunc(int i) {
-    PopupMenuButton(
-      itemBuilder: (context) => [PopupMenuItem(child: Text('data'))],
-    );
-  }
 }
