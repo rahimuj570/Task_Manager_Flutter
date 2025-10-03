@@ -20,6 +20,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   Map<String, dynamic> _taskCount = {};
 
   Future<void> getTodoStatusCount() async {
+    _taskCount.clear();
     isCounting = !isCounting;
     setState(() {});
     ApiResponse apiResponse = await ApiCalller.getRequest(
@@ -122,20 +123,36 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             ),
             child: Expanded(
               child: Material(
-                child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    if (index == _newTaskList.length - 1) {
-                      return SizedBox(height: 70);
-                    }
-                    return TaskTileWidget(
-                      reFetch: getNewTodo,
-                      tm: _newTaskList[index],
-                      statusColor: Colors.cyan,
-                      status: TaskStatus.New,
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(height: 5),
-                  itemCount: _newTaskList.length,
+                child: Visibility(
+                  visible: _newTaskList.isNotEmpty,
+                  replacement: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.folder_off, size: 200, color: Colors.green),
+                        Text(
+                          "No Task Found",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                  child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      if (index == _newTaskList.length) {
+                        return SizedBox(height: 70);
+                      }
+                      return TaskTileWidget(
+                        reCount: getTodoStatusCount,
+                        reFetch: getNewTodo,
+                        tm: _newTaskList[index],
+                        statusColor: Colors.cyan,
+                        status: TaskStatus.New,
+                      );
+                    },
+                    separatorBuilder: (context, index) => SizedBox(height: 5),
+                    itemCount: _newTaskList.length,
+                  ),
                 ),
               ),
             ),

@@ -61,15 +61,30 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
                 ),
               ),
               child: Material(
-                child: ListView.separated(
-                  itemBuilder: (context, index) => TaskTileWidget(
-                    reFetch: getCompletedTodo,
-                    statusColor: Colors.green,
-                    status: TaskStatus.Completed,
-                    tm: _completedTaskList[index],
+                child: Visibility(
+                  visible: _completedTaskList.isNotEmpty,
+                  replacement: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.folder_off, size: 200, color: Colors.green),
+                        Text(
+                          "No Task Found",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
                   ),
-                  separatorBuilder: (context, index) => SizedBox(height: 5),
-                  itemCount: _completedTaskList.length,
+                  child: ListView.separated(
+                    itemBuilder: (context, index) => TaskTileWidget(
+                      reFetch: getCompletedTodo,
+                      statusColor: Colors.green,
+                      status: TaskStatus.Completed,
+                      tm: _completedTaskList[index],
+                    ),
+                    separatorBuilder: (context, index) => SizedBox(height: 5),
+                    itemCount: _completedTaskList.length,
+                  ),
                 ),
               ),
             ),

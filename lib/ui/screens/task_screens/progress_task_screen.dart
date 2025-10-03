@@ -24,7 +24,7 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
             child: Material(
               child: ListView.separated(
                 itemBuilder: (context, index) => TaskTileWidget(
-                  reFetch: () {},
+                  reFetch: () => Future<void>(() {}),
                   statusColor: Colors.purpleAccent,
                   tm: _progressTaskList[index],
                   status: TaskStatus.Progress,

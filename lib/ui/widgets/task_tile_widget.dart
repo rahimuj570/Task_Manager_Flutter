@@ -12,12 +12,14 @@ class TaskTileWidget extends StatefulWidget {
     required this.status,
     required this.statusColor,
     required this.reFetch,
+    this.reCount,
   });
 
   final TaskStatus status;
   final Color statusColor;
   final TaskModel tm;
   final VoidCallback reFetch;
+  final VoidCallback? reCount;
 
   @override
   State<TaskTileWidget> createState() => _TaskTileWidgetState();
@@ -146,6 +148,9 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
     if (apiResponse.isuccess) {
       showSnackBar(context, "Successfully status changed!", ToastType.success);
       widget.reFetch();
+      if (widget.reCount != null) {
+        widget.reCount!();
+      }
     } else {
       showSnackBar(context, "Something Went Wrong", ToastType.error);
     }
