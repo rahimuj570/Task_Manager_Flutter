@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/urls.dart';
+import 'package:todo_app/ui/utils/refresh_new_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 import 'package:todo_app/ui/widgets/show_toast.dart';
 import 'package:todo_app/ui/widgets/tm_app_bar.dart';
@@ -116,6 +117,8 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         body: body,
       );
       if (apiResponse.isuccess) {
+        RefreshNewScreen.refresh!.call();
+
         showSnackBar(
           context,
           "New ToDo added successfully!",

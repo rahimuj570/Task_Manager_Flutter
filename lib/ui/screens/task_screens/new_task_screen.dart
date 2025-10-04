@@ -3,6 +3,7 @@ import 'package:todo_app/data/models/task_model.dart';
 import 'package:todo_app/data/models/task_status_count_model.dart';
 import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/urls.dart';
+import 'package:todo_app/ui/utils/refresh_new_screen.dart';
 import 'package:todo_app/ui/utils/task_status.dart';
 import 'package:todo_app/ui/widgets/task_tile_widget.dart';
 import 'package:todo_app/ui/widgets/top_status_card_widget.dart';
@@ -66,6 +67,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     super.initState();
     getTodoStatusCount();
     getNewTodo();
+    RefreshNewScreen.refresh = () => setState(() {
+      getTodoStatusCount();
+      getNewTodo();
+    });
   }
 
   @override
