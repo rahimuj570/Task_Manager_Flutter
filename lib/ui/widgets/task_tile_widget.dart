@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_app/data/models/task_model.dart';
 import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/urls.dart';
@@ -47,7 +48,9 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
           ),
           SizedBox(height: 8),
           Text(
-            widget.tm.createdDate,
+            DateFormat.yMMMd().add_jm().format(
+              DateTime.parse(widget.tm.createdDate),
+            ),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               fontWeight: FontWeight.w800,
               fontSize: 10,
