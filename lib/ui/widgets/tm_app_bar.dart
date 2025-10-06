@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:todo_app/data/models/user_model.dart';
 import 'package:todo_app/ui/controllers/auth_controller.dart';
 import 'package:todo_app/ui/screens/edit_profile_screen.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
