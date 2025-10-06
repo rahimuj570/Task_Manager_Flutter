@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:todo_app/data/models/user_model.dart';
 import 'package:todo_app/ui/controllers/auth_controller.dart';
 import 'package:todo_app/ui/screens/edit_profile_screen.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
@@ -21,6 +25,24 @@ class _TmAppBarState extends State<TmAppBar> {
     }
   }
 
+  // UserModel user = AuthController.userModel!;
+  late Uint8List _decodedPhoto;
+  String photoData = AuthController.userModel!.photo.trim();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if (photoData.startsWith("[")) {
+      // Convert from JSON array to Uint8List
+      List<dynamic> list = jsonDecode(photoData);
+      _decodedPhoto = Uint8List.fromList(list.cast<int>());
+    } else {
+      // Normal base64 string
+      _decodedPhoto = base64Decode(photoData);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -33,11 +55,13 @@ class _TmAppBarState extends State<TmAppBar> {
           GestureDetector(
             onTap: _gotoEditProfile,
             child: CircleAvatar(
-              foregroundImage: NetworkImage(
-                "https://avatars.githubusercontent.com/u/89479874?v=4",
-              ),
+              foregroundImage: photoData.isNotEmpty
+                  ? MemoryImage(_decodedPhoto)
+                  : NetworkImage(
+                      "https://avatars.githubusercontent.com/u/89479874?v=4",
+                    ),
               onForegroundImageError: (exception, stackTrace) =>
-                  debugPrint("error dp " + exception.toString()),
+                  debugPrint("error dp $exception"),
               child: Icon(Icons.error),
             ),
           ),

@@ -4,6 +4,7 @@ class UserModel {
   final String firstName;
   final String lastName;
   final String mobile;
+  final String photo;
 
   UserModel({
     required this.id,
@@ -11,6 +12,7 @@ class UserModel {
     required this.firstName,
     required this.lastName,
     required this.mobile,
+    required this.photo,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> data) {
@@ -20,6 +22,7 @@ class UserModel {
       firstName: data['firstName'],
       lastName: data['lastName'],
       mobile: data['mobile'],
+      photo: data['photo'],
     );
   }
   static Map<String, dynamic> toJson(UserModel model) {
@@ -29,6 +32,7 @@ class UserModel {
       "firstName": model.firstName,
       "lastName": model.lastName,
       "mobile": model.mobile,
+      "photo": model.photo,
     };
   }
 }

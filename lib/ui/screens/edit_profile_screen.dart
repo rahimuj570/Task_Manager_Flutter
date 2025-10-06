@@ -1,9 +1,15 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:todo_app/data/models/user_model.dart';
+import 'package:todo_app/data/services/api_calller.dart';
+import 'package:todo_app/data/utils/urls.dart';
 import 'package:todo_app/ui/controllers/auth_controller.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
+import 'package:todo_app/ui/widgets/show_toast.dart';
 import 'package:todo_app/ui/widgets/tm_app_bar.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -28,6 +34,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isShowPassword = false;
+  bool isUpdating = false;
 
   late final UserModel user;
   @override
@@ -68,7 +75,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         spacing: 10,
                         children: [
                           GestureDetector(
-                            onTap: _getImage,
+                            onTap: !isUpdating ? _getImage : null,
                             child: Container(
                               height: 40,
                               decoration: BoxDecoration(color: Colors.white),
@@ -115,6 +122,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             decoration: InputDecoration(label: Text("Email")),
                           ),
                           TextFormField(
+                            enabled: !isUpdating,
                             controller: _firstNameTEC,
                             decoration: InputDecoration(
                               label: Text("First Name"),
@@ -129,6 +137,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             autovalidateMode: AutovalidateMode.always,
                           ),
                           TextFormField(
+                            enabled: !isUpdating,
                             controller: _lastNameTEC,
                             decoration: InputDecoration(
                               label: Text("Last Name"),
@@ -143,6 +152,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             autovalidateMode: AutovalidateMode.always,
                           ),
                           TextFormField(
+                            enabled: !isUpdating,
                             controller: _mobileTEC,
                             decoration: InputDecoration(label: Text("Mobile")),
                             validator: (value) {
@@ -155,6 +165,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             autovalidateMode: AutovalidateMode.always,
                           ),
                           TextFormField(
+                            enabled: !isUpdating,
                             controller: _passwordTEC,
                             decoration: InputDecoration(
                               suffix: IconButton(
@@ -172,13 +183,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   });
                                 },
                               ),
-                              label: Text("Password"),
+                              label: Text("Password (Optional)"),
                             ),
                             obscureText: !isShowPassword,
                             obscuringCharacter: '*',
                             validator: (value) {
                               if (value?.trim().isEmpty ?? true) {
-                                return "Must input Password name";
+                                return null;
                               } else if (value!.length < 7) {
                                 return "Length of the Password must be atleast 7";
                               }
@@ -188,11 +199,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                           ),
-                          FilledButton(onPressed: () {}, child: Text("Update")),
+                          FilledButton(
+                            onPressed: !isUpdating
+                                ? () {
+                                    if (_formKey.currentState!.validate()) {
+                                      _updateProfle();
+                                    }
+                                  }
+                                : null,
+                            child: Text("Update"),
+                          ),
                         ],
                       ),
                     ),
                   ],
+                ),
+              ),
+            ),
+            Visibility(
+              visible: isUpdating,
+              child: Center(
+                child: SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: CircularProgressIndicator(),
                 ),
               ),
             ),
@@ -209,5 +239,41 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _photoPlaceholder = photo!.name;
       });
     }
+  }
+
+  Future<void> _updateProfle() async {
+    isUpdating = true;
+    setState(() {});
+
+    Map<String, dynamic> body = {
+      "email": _emailTEC.text.trim(),
+      "firstName": _firstNameTEC.text.trim(),
+      "lastName": _lastNameTEC.text.trim(),
+      "mobile": _mobileTEC.text.trim(),
+    };
+    if (photo != null) {
+      Uint8List bytes = await photo!.readAsBytes();
+      String encodedPhoto = base64Encode(bytes);
+      body['photo'] = encodedPhoto;
+    }
+
+    if (_passwordTEC.text.trim().isNotEmpty) {
+      body['password'] = _passwordTEC.text.trim();
+    }
+
+    final ApiResponse apiResponse = await ApiCalller.postRequest(
+      url: Urls.updateProfile,
+      body: body,
+    );
+
+    if (apiResponse.isuccess) {
+      _passwordTEC.clear();
+      showSnackBar(context, "Profile Updated Successfully!", ToastType.success);
+    } else {
+      showSnackBar(context, "Something Went Wrong!", ToastType.error);
+    }
+    setState(() {
+      isUpdating = false;
+    });
   }
 }
