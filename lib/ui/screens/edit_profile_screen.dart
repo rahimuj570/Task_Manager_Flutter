@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:todo_app/data/models/user_model.dart';
+import 'package:todo_app/ui/controllers/auth_controller.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 import 'package:todo_app/ui/widgets/tm_app_bar.dart';
@@ -18,6 +20,29 @@ String _photoPlaceholder = "No Photo Selected";
 class _EditProfileScreenState extends State<EditProfileScreen> {
   // ImagePicker imagePicker = imagePicker();
   XFile? photo;
+  final TextEditingController _emailTEC = TextEditingController();
+  final TextEditingController _firstNameTEC = TextEditingController();
+  final TextEditingController _lastNameTEC = TextEditingController();
+  final TextEditingController _mobileTEC = TextEditingController();
+  final TextEditingController _passwordTEC = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isShowPassword = false;
+
+  late final UserModel user;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    user = AuthController.userModel!;
+
+    _emailTEC.text = user.email;
+    _firstNameTEC.text = user.firstName;
+    _lastNameTEC.text = user.lastName;
+    _emailTEC.text = user.email;
+    _mobileTEC.text = user.mobile;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +63,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     SizedBox(height: 16),
                     Form(
+                      key: _formKey,
                       child: Column(
                         spacing: 10,
                         children: [
@@ -83,26 +109,84 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ),
                             ),
                           ),
-                          TextField(
+                          TextFormField(
+                            controller: _emailTEC,
+                            enabled: false,
                             decoration: InputDecoration(label: Text("Email")),
                           ),
-                          TextField(
+                          TextFormField(
+                            controller: _firstNameTEC,
                             decoration: InputDecoration(
                               label: Text("First Name"),
                             ),
+                            validator: (value) {
+                              if (value?.trim().isEmpty ?? true) {
+                                return "Must input First name";
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            autovalidateMode: AutovalidateMode.always,
                           ),
-                          TextField(
+                          TextFormField(
+                            controller: _lastNameTEC,
                             decoration: InputDecoration(
                               label: Text("Last Name"),
                             ),
+                            validator: (value) {
+                              if (value?.trim().isEmpty ?? true) {
+                                return "Must input Last name";
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            autovalidateMode: AutovalidateMode.always,
                           ),
-                          TextField(
+                          TextFormField(
+                            controller: _mobileTEC,
                             decoration: InputDecoration(label: Text("Mobile")),
+                            validator: (value) {
+                              if (value?.trim().isEmpty ?? true) {
+                                return "Must input Mobile number";
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            autovalidateMode: AutovalidateMode.always,
                           ),
-                          TextField(
+                          TextFormField(
+                            controller: _passwordTEC,
                             decoration: InputDecoration(
+                              suffix: IconButton(
+                                // constraints: BoxConstraints(maxHeight: 0),
+                                // padding: EdgeInsets.all(0),
+                                icon: Icon(
+                                  isShowPassword
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                  size: 18,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    isShowPassword = !isShowPassword;
+                                  });
+                                },
+                              ),
                               label: Text("Password"),
                             ),
+                            obscureText: !isShowPassword,
+                            obscuringCharacter: '*',
+                            validator: (value) {
+                              if (value?.trim().isEmpty ?? true) {
+                                return "Must input Password name";
+                              } else if (value!.length < 7) {
+                                return "Length of the Password must be atleast 7";
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.done,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                           ),
                           FilledButton(onPressed: () {}, child: Text("Update")),
                         ],

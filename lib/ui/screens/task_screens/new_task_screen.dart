@@ -156,7 +156,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       );
                     },
                     separatorBuilder: (context, index) => SizedBox(height: 5),
-                    itemCount: _newTaskList.length,
+                    itemCount: _newTaskList.length + 1,
                   ),
                 ),
               ),
