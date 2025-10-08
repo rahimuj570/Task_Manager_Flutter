@@ -29,17 +29,11 @@ class _TmAppBarState extends State<TmAppBar> {
   // UserModel user = AuthController.userModel!;
   late Uint8List _decodedPhoto;
   String? photoData;
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
-    photoData = AppbarInheritedWidget.of(
-      context,
-    )?.tmAppBarInfoNotifier.photo?.trim();
+    final notifier = AppbarInheritedWidget.of(context)?.tmAppBarInfoNotifier;
+    photoData = notifier?.photo?.trim();
     if (photoData != null) {
       if (photoData!.startsWith("[")) {
         // Convert from JSON array to Uint8List
@@ -51,6 +45,7 @@ class _TmAppBarState extends State<TmAppBar> {
       }
     }
 
+    debugPrint("from appbar gooooooooo");
     return AppBar(
       leadingWidth: 30,
       backgroundColor: Colors.green,
@@ -78,12 +73,9 @@ class _TmAppBarState extends State<TmAppBar> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListenableBuilder(
-                listenable: TmAppBarInfoNotifier(),
+                listenable: notifier!,
                 builder: (context, child) => Text(
-                  AppbarInheritedWidget.of(
-                        context,
-                      )?.tmAppBarInfoNotifier.fullName ??
-                      "Rahimujjaman",
+                  notifier.fullName ?? "Rahimujjaman",
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall?.copyWith(color: Colors.white),

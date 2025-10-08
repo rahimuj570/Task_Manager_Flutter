@@ -12,7 +12,7 @@ class AppbarInheritedWidget extends InheritedWidget {
   @override
   bool updateShouldNotify(AppbarInheritedWidget oldWidget) {
     // TODO: implement updateShouldNotify
-    TmAppBarInfoNotifier old = oldWidget.tmAppBarInfoNotifier;
+    // TmAppBarInfoNotifier old = oldWidget.tmAppBarInfoNotifier;
     return true;
   }
 
