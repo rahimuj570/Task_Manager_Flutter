@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -246,6 +245,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     setState(() {});
 
     Map<String, dynamic> body = {
+      "photo": user.photo,
+      "_id": user.id,
       "email": _emailTEC.text.trim(),
       "firstName": _firstNameTEC.text.trim(),
       "lastName": _lastNameTEC.text.trim(),
@@ -268,6 +269,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     if (apiResponse.isuccess) {
       _passwordTEC.clear();
+      await AuthController.updateUserData(UserModel.fromJson(body));
       showSnackBar(context, "Profile Updated Successfully!", ToastType.success);
     } else {
       showSnackBar(context, "Something Went Wrong!", ToastType.error);
@@ -275,5 +277,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     setState(() {
       isUpdating = false;
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _emailTEC.dispose();
+    _firstNameTEC.dispose();
+    _lastNameTEC.dispose();
+    _mobileTEC.dispose();
+    _passwordTEC.dispose();
+    super.dispose();
   }
 }

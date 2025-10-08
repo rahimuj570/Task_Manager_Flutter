@@ -12,6 +12,8 @@ import 'package:todo_app/ui/screens/task_screens/cancelled_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/completed_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/new_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/progress_task_screen.dart';
+import 'package:todo_app/ui/utils/state%20management/app_bar_inherited_widget.dart';
+import 'package:todo_app/ui/utils/state%20management/tm_app_bar_notifier.dart';
 
 class TaskManagerApp extends StatelessWidget {
   const TaskManagerApp({super.key});
@@ -20,56 +22,59 @@ class TaskManagerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: appContext,
-      debugShowCheckedModeBanner: false,
-      title: 'Task Manager',
-      theme: ThemeData(
-        colorSchemeSeed: Colors.green,
-        progressIndicatorTheme: ProgressIndicatorThemeData(
-          color: Colors.green,
-          strokeWidth: 8,
-        ),
-
-        inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
-          border: OutlineInputBorder(borderSide: BorderSide.none),
-          fillColor: Colors.white,
-          filled: true,
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
+    return AppbarInheritedWidget(
+      tmAppBarInfoNotifier: TmAppBarInfoNotifier(),
+      child: MaterialApp(
+        navigatorKey: appContext,
+        debugShowCheckedModeBanner: false,
+        title: 'Task Manager',
+        theme: ThemeData(
+          colorSchemeSeed: Colors.green,
+          progressIndicatorTheme: ProgressIndicatorThemeData(
+            color: Colors.green,
+            strokeWidth: 8,
           ),
-        ),
-        filledButtonTheme: FilledButtonThemeData(
-          style: FilledButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            fixedSize: Size.fromWidth(double.maxFinite),
-            backgroundColor: Colors.green,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6),
+
+          inputDecorationTheme: InputDecorationTheme(
+            labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
+            border: OutlineInputBorder(borderSide: BorderSide.none),
+            fillColor: Colors.white,
+            filled: true,
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red),
             ),
           ),
+          filledButtonTheme: FilledButtonThemeData(
+            style: FilledButton.styleFrom(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              fixedSize: Size.fromWidth(double.maxFinite),
+              backgroundColor: Colors.green,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+          textTheme: TextTheme(
+            headlineMedium: TextStyle(fontWeight: FontWeight.w600),
+          ),
         ),
-        textTheme: TextTheme(
-          headlineMedium: TextStyle(fontWeight: FontWeight.w600),
-        ),
+        routes: {
+          SplashScreen.name: (_) => SplashScreen(),
+          LoginScreen.name: (_) => LoginScreen(),
+          ForgotPasswordEmailScreen.name: (_) => ForgotPasswordEmailScreen(),
+          ForgotPasswordPinScreen.name: (_) => ForgotPasswordPinScreen(),
+          RegistrationScreen.name: (_) => RegistrationScreen(),
+          NewTaskScreen.name: (_) => NewTaskScreen(),
+          CompletedTaskScreen.name: (_) => CompletedTaskScreen(),
+          CancelledTaskScreen.name: (_) => CancelledTaskScreen(),
+          ProgressTaskScreen.name: (_) => ProgressTaskScreen(),
+          AddNewTaskScreen.name: (_) => AddNewTaskScreen(),
+          SetNewPasswordScreen.name: (_) => SetNewPasswordScreen(),
+          MainNavBarHolder.name: (_) => MainNavBarHolder(),
+          EditProfileScreen.name: (_) => EditProfileScreen(),
+        },
+        initialRoute: SplashScreen.name,
       ),
-      routes: {
-        SplashScreen.name: (_) => SplashScreen(),
-        LoginScreen.name: (_) => LoginScreen(),
-        ForgotPasswordEmailScreen.name: (_) => ForgotPasswordEmailScreen(),
-        ForgotPasswordPinScreen.name: (_) => ForgotPasswordPinScreen(),
-        RegistrationScreen.name: (_) => RegistrationScreen(),
-        NewTaskScreen.name: (_) => NewTaskScreen(),
-        CompletedTaskScreen.name: (_) => CompletedTaskScreen(),
-        CancelledTaskScreen.name: (_) => CancelledTaskScreen(),
-        ProgressTaskScreen.name: (_) => ProgressTaskScreen(),
-        AddNewTaskScreen.name: (_) => AddNewTaskScreen(),
-        SetNewPasswordScreen.name: (_) => SetNewPasswordScreen(),
-        MainNavBarHolder.name: (_) => MainNavBarHolder(),
-        EditProfileScreen.name: (_) => EditProfileScreen(),
-      },
-      initialRoute: SplashScreen.name,
     );
   }
 }

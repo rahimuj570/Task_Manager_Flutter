@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/ui/controllers/auth_controller.dart';
 import 'package:todo_app/ui/screens/edit_profile_screen.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
+import 'package:todo_app/ui/utils/state%20management/app_bar_inherited_widget.dart';
+import 'package:todo_app/ui/utils/state%20management/tm_app_bar_notifier.dart';
 
 class TmAppBar extends StatefulWidget implements PreferredSizeWidget {
   const TmAppBar({super.key});
@@ -26,24 +28,29 @@ class _TmAppBarState extends State<TmAppBar> {
 
   // UserModel user = AuthController.userModel!;
   late Uint8List _decodedPhoto;
-  String photoData = AuthController.userModel!.photo.trim();
+  String? photoData;
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    if (photoData.startsWith("[")) {
-      // Convert from JSON array to Uint8List
-      List<dynamic> list = jsonDecode(photoData);
-      _decodedPhoto = Uint8List.fromList(list.cast<int>());
-    } else {
-      // Normal base64 string
-      _decodedPhoto = base64Decode(photoData);
-    }
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    photoData = AppbarInheritedWidget.of(
+      context,
+    )?.tmAppBarInfoNotifier.photo?.trim();
+    if (photoData != null) {
+      if (photoData!.startsWith("[")) {
+        // Convert from JSON array to Uint8List
+        List<dynamic> list = jsonDecode(photoData!);
+        _decodedPhoto = Uint8List.fromList(list.cast<int>());
+      } else {
+        // Normal base64 string
+        _decodedPhoto = base64Decode(photoData!);
+      }
+    }
+
     return AppBar(
       leadingWidth: 30,
       backgroundColor: Colors.green,
@@ -53,25 +60,34 @@ class _TmAppBarState extends State<TmAppBar> {
         children: [
           GestureDetector(
             onTap: _gotoEditProfile,
-            child: CircleAvatar(
-              foregroundImage: photoData.isNotEmpty
-                  ? MemoryImage(_decodedPhoto)
-                  : NetworkImage(
-                      "https://avatars.githubusercontent.com/u/89479874?v=4",
-                    ),
-              onForegroundImageError: (exception, stackTrace) =>
-                  debugPrint("error dp $exception"),
-              child: Icon(Icons.error),
+            child: ListenableBuilder(
+              listenable: TmAppBarInfoNotifier(),
+              builder: (context, child) => CircleAvatar(
+                foregroundImage: photoData != null
+                    ? MemoryImage(_decodedPhoto)
+                    : NetworkImage(
+                        "https://avatars.githubusercontent.com/u/89479874?v=4",
+                      ),
+                onForegroundImageError: (exception, stackTrace) =>
+                    debugPrint("error dp $exception"),
+                child: Icon(Icons.error),
+              ),
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                AuthController.fullName ?? "Rahimujjaman",
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall?.copyWith(color: Colors.white),
+              ListenableBuilder(
+                listenable: TmAppBarInfoNotifier(),
+                builder: (context, child) => Text(
+                  AppbarInheritedWidget.of(
+                        context,
+                      )?.tmAppBarInfoNotifier.fullName ??
+                      "Rahimujjaman",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(color: Colors.white),
+                ),
               ),
               Text(
                 AuthController.userModel?.email ?? "rahimuj570@gmail.com",
