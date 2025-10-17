@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/data/models/task_model.dart';
-import 'package:todo_app/data/services/api_calller.dart';
-import 'package:todo_app/data/utils/urls.dart';
 import 'package:todo_app/ui/controllers/progress_task_section_provider.dart';
 import 'package:todo_app/ui/utils/task_status.dart';
 import 'package:todo_app/ui/widgets/task_tile_widget.dart';
