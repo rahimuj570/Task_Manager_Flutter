@@ -17,10 +17,12 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   void initState() {
     super.initState();
-    NewTaskSectionProvider newTaskSectionProvider = context
-        .read<NewTaskSectionProvider>();
-    newTaskSectionProvider.getTodoStatusCount();
-    newTaskSectionProvider.fetchNewTodo();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NewTaskSectionProvider newTaskSectionProvider = context
+          .read<NewTaskSectionProvider>();
+      newTaskSectionProvider.getTodoStatusCount();
+      newTaskSectionProvider.fetchNewTodo();
+    });
   }
 
   @override
