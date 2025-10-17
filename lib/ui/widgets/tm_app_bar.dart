@@ -77,7 +77,7 @@ class _TmAppBarState extends State<TmAppBar> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  value.fullName() ?? "Rahimujjaman",
+                  value.fullName(),
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall?.copyWith(color: Colors.white),
