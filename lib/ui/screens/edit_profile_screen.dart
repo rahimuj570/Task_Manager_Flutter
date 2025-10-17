@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/data/models/user_model.dart';
-import 'package:todo_app/data/services/api_calller.dart';
-import 'package:todo_app/data/utils/urls.dart';
 import 'package:todo_app/ui/controllers/auth_controller.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 import 'package:todo_app/ui/widgets/show_toast.dart';
