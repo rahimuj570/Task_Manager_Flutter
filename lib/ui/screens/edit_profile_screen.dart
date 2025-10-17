@@ -267,14 +267,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       body['password'] = _passwordTEC.text.trim();
     }
 
-    final ApiResponse apiResponse = await ApiCalller.postRequest(
-      url: Urls.updateProfile,
-      body: body,
-    );
+    bool success = await authController.updateUserData(body);
 
-    if (apiResponse.isuccess) {
+    if (success) {
       _passwordTEC.clear();
-      await authController.updateUserData(UserModel.fromJson(body));
       showSnackBar(context, "Profile Updated Successfully!", ToastType.success);
     } else {
       showSnackBar(context, "Something Went Wrong!", ToastType.error);

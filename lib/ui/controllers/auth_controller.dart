@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/data/models/user_model.dart';
+import 'package:todo_app/data/services/api_calller.dart';
+import 'package:todo_app/data/utils/urls.dart';
 
 class AuthController extends ChangeNotifier {
   final String _tokenKey = 'token';
@@ -45,9 +47,20 @@ class AuthController extends ChangeNotifier {
     userToken = null;
   }
 
-  Future<void> updateUserData(UserModel model) async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    await sp.setString(_userDataKey, jsonEncode(UserModel.toJson(model)));
-    userModel = model;
+  Future<bool> updateUserData(Map<String, dynamic> body) async {
+    bool success = false;
+    final ApiResponse apiResponse = await ApiCalller.postRequest(
+      url: Urls.updateProfile,
+      body: body,
+    );
+    if (apiResponse.isuccess) {
+      success = true;
+      UserModel um = UserModel.fromJson(body);
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      await sp.setString(_userDataKey, jsonEncode(UserModel.toJson(um)));
+      userModel = um;
+      notifyListeners();
+    }
+    return success;
   }
 }
