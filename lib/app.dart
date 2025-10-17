@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/ui/controllers/cancelled_task_section_provider.dart';
 import 'package:todo_app/ui/controllers/completed_task_section_provider.dart';
 import 'package:todo_app/ui/controllers/new_task_section_provider.dart';
 import 'package:todo_app/ui/screens/add_new_task_screen.dart';
@@ -28,6 +29,9 @@ class TaskManagerApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => NewTaskSectionProvider()),
         ChangeNotifierProvider(
           create: (context) => CompletedTaskSectionProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CancelledTaskSectionProvider(),
         ),
       ],
       child: MaterialApp(
