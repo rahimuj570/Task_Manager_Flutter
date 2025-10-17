@@ -55,32 +55,27 @@ class _TmAppBarState extends State<TmAppBar> {
         children: [
           GestureDetector(
             onTap: _gotoEditProfile,
-            child: ListenableBuilder(
-              listenable: TmAppBarInfoNotifier(),
-              builder: (context, child) => CircleAvatar(
-                foregroundImage: photoData != null
-                    ? MemoryImage(_decodedPhoto)
-                    : NetworkImage(
-                        "https://avatars.githubusercontent.com/u/89479874?v=4",
-                      ),
-                onForegroundImageError: (exception, stackTrace) =>
-                    debugPrint("error dp $exception"),
-                child: Icon(Icons.error),
-              ),
+            child: CircleAvatar(
+              foregroundImage: photoData != null
+                  ? MemoryImage(_decodedPhoto)
+                  : NetworkImage(
+                      "https://avatars.githubusercontent.com/u/89479874?v=4",
+                    ),
+              onForegroundImageError: (exception, stackTrace) =>
+                  debugPrint("error dp $exception"),
+              child: Icon(Icons.error),
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListenableBuilder(
-                listenable: notifier!,
-                builder: (context, child) => Text(
-                  notifier.fullName ?? "Rahimujjaman",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(color: Colors.white),
-                ),
+              Text(
+                AuthController.fullName() ?? "Rahimujjaman",
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(color: Colors.white),
               ),
+
               Text(
                 AuthController.userModel?.email ?? "rahimuj570@gmail.com",
                 style: Theme.of(

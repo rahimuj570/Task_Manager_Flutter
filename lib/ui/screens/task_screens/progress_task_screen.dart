@@ -77,7 +77,6 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
                   ),
                   child: ListView.separated(
                     itemBuilder: (context, index) => TaskTileWidget(
-                      reFetch: getCancelledTodo,
                       statusColor: Colors.purple,
                       status: TaskStatus.Progress,
                       tm: _cancelledTaskList[index],

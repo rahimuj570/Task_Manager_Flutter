@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/ui/controllers/new_task_section_provider.dart';
 import 'package:todo_app/ui/screens/add_new_task_screen.dart';
 import 'package:todo_app/ui/screens/edit_profile_screen.dart';
 import 'package:todo_app/ui/screens/forgot_password_email_screen.dart';
@@ -22,8 +24,10 @@ class TaskManagerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppbarInheritedWidget(
-      tmAppBarInfoNotifier: TmAppBarInfoNotifier(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => NewTaskSectionProvider()),
+      ],
       child: MaterialApp(
         navigatorKey: appContext,
         debugShowCheckedModeBanner: false,
