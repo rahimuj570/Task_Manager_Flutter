@@ -82,4 +82,10 @@ class NewTaskSectionProvider extends ChangeNotifier {
     notifyListeners();
     return success;
   }
+
+  void removeTodoFromList(String id) {
+    _newTaskList.removeWhere((element) => element.id == id);
+    notifyListeners();
+    _taskCount[TaskStatus.New.name] = _taskCount[TaskStatus.New.name] - 1;
+  }
 }

@@ -27,4 +27,9 @@ class CompletedTaskSectionProvider extends ChangeNotifier {
     isFatching = false;
     notifyListeners();
   }
+
+  void removeTodoFromList(String id) {
+    _completedTaskList.removeWhere((element) => element.id == id);
+    notifyListeners();
+  }
 }

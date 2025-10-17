@@ -27,4 +27,9 @@ class CancelledTaskSectionProvider extends ChangeNotifier {
     isFatching = false;
     notifyListeners();
   }
+
+  void removeTodoFromList(String id) {
+    _cancelledTaskList.removeWhere((element) => element.id == id);
+    notifyListeners();
+  }
 }

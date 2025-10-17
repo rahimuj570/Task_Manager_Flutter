@@ -29,4 +29,9 @@ class ProgressTaskSectionProvider extends ChangeNotifier {
     isFatching = !isFatching;
     notifyListeners();
   }
+
+  void removeTodoFromList(String id) {
+    _progressedTaskList.removeWhere((element) => element.id == id);
+    notifyListeners();
+  }
 }

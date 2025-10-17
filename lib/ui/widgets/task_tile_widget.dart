@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/data/models/task_model.dart';
-import 'package:todo_app/data/services/api_calller.dart';
-import 'package:todo_app/data/utils/urls.dart';
+import 'package:todo_app/ui/controllers/task_status_change_controller.dart';
 import 'package:todo_app/ui/utils/task_status.dart';
 import 'package:todo_app/ui/widgets/show_toast.dart';
 
@@ -148,21 +147,21 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
 
   Future<void> _changeStatus(TaskStatus status) async {
     setState(() {
-      isUpdating = !isUpdating;
+      isUpdating = true;
     });
-    debugPrint(widget.tm.id);
-    debugPrint(status.name);
-    ApiResponse apiResponse = await ApiCalller.getRequest(
-      url: Urls.updatestatus(todoId: widget.tm.id, status: status.name),
+    bool success = await TaskStatusChangeController.changeStatus(
+      widget.tm.status,
+      status,
+      widget.tm.id,
+      context,
     );
-
-    if (apiResponse.isuccess) {
+    if (success) {
       showSnackBar(context, "Successfully status changed!", ToastType.success);
     } else {
       showSnackBar(context, "Something Went Wrong", ToastType.error);
     }
     setState(() {
-      isUpdating = !isUpdating;
+      isUpdating = false;
     });
   }
 
@@ -170,10 +169,12 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
     setState(() {
       isDeleting = true;
     });
-    ApiResponse apiResponse = await ApiCalller.getRequest(
-      url: Urls.deleteTaskById(widget.tm.id),
+    bool success = await TaskStatusChangeController.deleteTask(
+      widget.tm.status,
+      widget.tm.id,
+      context,
     );
-    if (apiResponse.isuccess) {
+    if (success) {
       showSnackBar(context, "Successfully Deleted", ToastType.success);
     } else {
       showSnackBar(context, "Failed to deletes", ToastType.error);
