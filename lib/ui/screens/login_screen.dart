@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/data/models/user_model.dart';
 import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/email_validator.dart';
@@ -24,6 +25,14 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailTEC = TextEditingController();
   TextEditingController passwordTEC = TextEditingController();
   bool isProcessing = false;
+  late AuthController authController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    authController = context.read<AuthController>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     if (apiResponse.statusCode == 200 &&
         apiResponse.responseData['status'] == 'success') {
-      await AuthController.saveUserData(
+      await authController.saveUserData(
         UserModel.fromJson(apiResponse.responseData['data']),
         apiResponse.responseData['token'],
       );

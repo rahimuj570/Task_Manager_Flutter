@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/ui/utils/state%20management/tm_app_bar_notifier.dart';
+import 'package:todo_app/ui/utils/state%20management(obsolete)/tm_app_bar_notifier.dart';
 
 class AppbarInheritedWidget extends InheritedWidget {
   const AppbarInheritedWidget({

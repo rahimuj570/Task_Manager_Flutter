@@ -1,0 +1,9 @@
+  AppbarInheritedWidget.of(
+      TaskManagerApp.appContext.currentContext!,
+    )?.tmAppBarInfoNotifier.setFullName(fullName());
+
+
+    
+    AppbarInheritedWidget.of(
+      TaskManagerApp.appContext.currentContext!,
+    )?.tmAppBarInfoNotifier.setPhoto(model.photo);

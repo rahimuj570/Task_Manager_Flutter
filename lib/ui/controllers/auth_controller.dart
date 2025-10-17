@@ -1,34 +1,26 @@
 import 'dart:convert';
-
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todo_app/app.dart';
 import 'package:todo_app/data/models/user_model.dart';
-import 'package:todo_app/ui/utils/state%20management/app_bar_inherited_widget.dart';
 
-class AuthController {
-  static const String _tokenKey = 'token';
-  static const String _userDataKey = 'userData';
+class AuthController extends ChangeNotifier {
+  final String _tokenKey = 'token';
+  final String _userDataKey = 'userData';
 
   static UserModel? userModel;
   static String? userToken;
-  static String fullName() =>
+  String fullName() =>
       "${userModel?.firstName ?? "Md."} ${userModel?.lastName ?? "Rahimujjaman"}";
 
-  static Future<void> saveUserData(UserModel model, String token) async {
+  Future<void> saveUserData(UserModel model, String token) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     await sp.setString(_tokenKey, token);
     await sp.setString(_userDataKey, jsonEncode(UserModel.toJson(model)));
     userModel = model;
     userToken = token;
-    AppbarInheritedWidget.of(
-      TaskManagerApp.appContext.currentContext!,
-    )?.tmAppBarInfoNotifier.setFullName(fullName());
-    AppbarInheritedWidget.of(
-      TaskManagerApp.appContext.currentContext!,
-    )?.tmAppBarInfoNotifier.setPhoto(model.photo);
   }
 
-  static Future<void> getUserData() async {
+  Future<void> getUserData() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String? token = sp.getString(_tokenKey);
     if (token != null) {
@@ -38,16 +30,10 @@ class AuthController {
 
       userModel = model;
       userToken = token;
-      AppbarInheritedWidget.of(
-        TaskManagerApp.appContext.currentContext!,
-      )?.tmAppBarInfoNotifier.setFullName(fullName());
-      AppbarInheritedWidget.of(
-        TaskManagerApp.appContext.currentContext!,
-      )?.tmAppBarInfoNotifier.setPhoto(model.photo);
     }
   }
 
-  static Future<bool> checkLoggedin() async {
+  Future<bool> checkLoggedin() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.getString(_tokenKey) != null;
   }
@@ -59,15 +45,9 @@ class AuthController {
     userToken = null;
   }
 
-  static Future<void> updateUserData(UserModel model) async {
+  Future<void> updateUserData(UserModel model) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     await sp.setString(_userDataKey, jsonEncode(UserModel.toJson(model)));
     userModel = model;
-    AppbarInheritedWidget.of(
-      TaskManagerApp.appContext.currentContext!,
-    )?.tmAppBarInfoNotifier.setFullName(fullName());
-    AppbarInheritedWidget.of(
-      TaskManagerApp.appContext.currentContext!,
-    )?.tmAppBarInfoNotifier.setPhoto(model.photo);
   }
 }

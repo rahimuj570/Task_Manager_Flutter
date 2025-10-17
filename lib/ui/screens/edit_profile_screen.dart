@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/data/models/user_model.dart';
 import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/urls.dart';
 import 'package:todo_app/ui/controllers/auth_controller.dart';
-// import 'package:image_picker/image_picker.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 import 'package:todo_app/ui/widgets/show_toast.dart';
 import 'package:todo_app/ui/widgets/tm_app_bar.dart';
@@ -36,10 +36,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool isUpdating = false;
 
   late final UserModel user;
+  late AuthController authController;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      authController = context.read<AuthController>();
+    });
     user = AuthController.userModel!;
 
     _emailTEC.text = user.email;
@@ -269,7 +274,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     if (apiResponse.isuccess) {
       _passwordTEC.clear();
-      await AuthController.updateUserData(UserModel.fromJson(body));
+      await authController.updateUserData(UserModel.fromJson(body));
       showSnackBar(context, "Profile Updated Successfully!", ToastType.success);
     } else {
       showSnackBar(context, "Something Went Wrong!", ToastType.error);

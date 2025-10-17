@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/ui/controllers/auth_controller.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
 import 'package:todo_app/ui/screens/main_nav_bar_holder.dart';
@@ -15,10 +16,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late AuthController authController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    authController = context.read<AuthController>();
     _gotoNext();
   }
 
@@ -47,8 +50,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _gotoNext() async {
     await Future.delayed(Duration(seconds: 3));
 
-    if (await AuthController.checkLoggedin()) {
-      await AuthController.getUserData();
+    if (await authController.checkLoggedin()) {
+      await authController.getUserData();
       Navigator.pushReplacementNamed(context, MainNavBarHolder.name);
     } else {
       Navigator.pushReplacementNamed(context, LoginScreen.name);

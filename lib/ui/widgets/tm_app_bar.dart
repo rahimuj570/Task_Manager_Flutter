@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/ui/controllers/auth_controller.dart';
 import 'package:todo_app/ui/screens/edit_profile_screen.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
-import 'package:todo_app/ui/utils/state%20management/app_bar_inherited_widget.dart';
-import 'package:todo_app/ui/utils/state%20management/tm_app_bar_notifier.dart';
 
 class TmAppBar extends StatefulWidget implements PreferredSizeWidget {
   const TmAppBar({super.key});
@@ -30,10 +29,17 @@ class _TmAppBarState extends State<TmAppBar> {
   late Uint8List _decodedPhoto;
   String? photoData;
 
+  late AuthController authController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    authController = context.read<AuthController>();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final notifier = AppbarInheritedWidget.of(context)?.tmAppBarInfoNotifier;
-    photoData = notifier?.photo?.trim();
+    photoData = AuthController.userModel?.photo?.trim();
     if (photoData != null) {
       if (photoData!.startsWith("[")) {
         // Convert from JSON array to Uint8List
@@ -46,48 +52,50 @@ class _TmAppBarState extends State<TmAppBar> {
     }
 
     debugPrint("from appbar gooooooooo");
-    return AppBar(
-      leadingWidth: 30,
-      backgroundColor: Colors.green,
+    return Consumer<AuthController>(
+      builder: (context, value, child) => AppBar(
+        leadingWidth: 30,
+        backgroundColor: Colors.green,
 
-      title: Row(
-        spacing: 8,
-        children: [
-          GestureDetector(
-            onTap: _gotoEditProfile,
-            child: CircleAvatar(
-              foregroundImage: photoData != null
-                  ? MemoryImage(_decodedPhoto)
-                  : NetworkImage(
-                      "https://avatars.githubusercontent.com/u/89479874?v=4",
-                    ),
-              onForegroundImageError: (exception, stackTrace) =>
-                  debugPrint("error dp $exception"),
-              child: Icon(Icons.error),
+        title: Row(
+          spacing: 8,
+          children: [
+            GestureDetector(
+              onTap: _gotoEditProfile,
+              child: CircleAvatar(
+                foregroundImage: photoData != null
+                    ? MemoryImage(_decodedPhoto)
+                    : NetworkImage(
+                        "https://avatars.githubusercontent.com/u/89479874?v=4",
+                      ),
+                onForegroundImageError: (exception, stackTrace) =>
+                    debugPrint("error dp $exception"),
+                child: Icon(Icons.error),
+              ),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AuthController.fullName() ?? "Rahimujjaman",
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall?.copyWith(color: Colors.white),
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  value.fullName() ?? "Rahimujjaman",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(color: Colors.white),
+                ),
 
-              Text(
-                AuthController.userModel?.email ?? "rahimuj570@gmail.com",
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: Colors.white),
-              ),
-            ],
-          ),
-        ],
+                Text(
+                  AuthController.userModel?.email ?? "rahimuj570@gmail.com",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.white),
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: [IconButton(onPressed: _logout, icon: Icon(Icons.logout))],
+        foregroundColor: Colors.white,
       ),
-      actions: [IconButton(onPressed: _logout, icon: Icon(Icons.logout))],
-      foregroundColor: Colors.white,
     );
   }
 
