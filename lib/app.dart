@@ -14,8 +14,6 @@ import 'package:todo_app/ui/screens/task_screens/cancelled_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/completed_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/new_task_screen.dart';
 import 'package:todo_app/ui/screens/task_screens/progress_task_screen.dart';
-import 'package:todo_app/ui/utils/state%20management/app_bar_inherited_widget.dart';
-import 'package:todo_app/ui/utils/state%20management/tm_app_bar_notifier.dart';
 
 class TaskManagerApp extends StatelessWidget {
   const TaskManagerApp({super.key});
