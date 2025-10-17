@@ -11,6 +11,9 @@ class AuthController extends ChangeNotifier {
   String? _loginErrorMessage;
   String? get getLoginErrorMessage => _loginErrorMessage;
   bool isLoginProcessing = false;
+  bool isRegistrationProcessing = false;
+  String? _registrationErrorMessage;
+  String? get getRegistrationErrorMessage => _registrationErrorMessage;
 
   static UserModel? userModel;
   static String? userToken;
@@ -89,6 +92,25 @@ class AuthController extends ChangeNotifier {
       _loginErrorMessage = apiResponse.errorMessage;
     }
     isLoginProcessing = false;
+    notifyListeners();
+    return success;
+  }
+
+  Future<bool> doUserRegistration(Map<String, dynamic> body) async {
+    isRegistrationProcessing = true;
+    notifyListeners();
+    bool success = true;
+
+    ApiResponse apiResponse = await ApiCalller.postRequest(
+      url: Urls.userRegistration,
+      body: body,
+    );
+
+    if (apiResponse.responseData['status'] == 'fail') {
+      success = false;
+      _registrationErrorMessage = apiResponse.responseData['data'];
+    }
+    isRegistrationProcessing = false;
     notifyListeners();
     return success;
   }
