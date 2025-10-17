@@ -8,6 +8,9 @@ import 'package:todo_app/data/utils/urls.dart';
 class AuthController extends ChangeNotifier {
   final String _tokenKey = 'token';
   final String _userDataKey = 'userData';
+  String? _loginErrorMessage;
+  String? get getLoginErrorMessage => _loginErrorMessage;
+  bool isLoginProcessing = false;
 
   static UserModel? userModel;
   static String? userToken;
@@ -61,6 +64,32 @@ class AuthController extends ChangeNotifier {
       userModel = um;
       notifyListeners();
     }
+    return success;
+  }
+
+  Future<bool> doLogin(Map<String, dynamic> body) async {
+    _loginErrorMessage = null;
+    isLoginProcessing = true;
+    notifyListeners();
+    bool success = false;
+
+    ApiResponse apiResponse = await ApiCalller.postRequest(
+      url: Urls.userLogin,
+      body: body,
+    );
+
+    if (apiResponse.statusCode == 200 &&
+        apiResponse.responseData['status'] == 'success') {
+      success = true;
+      saveUserData(
+        UserModel.fromJson(apiResponse.responseData['data']),
+        apiResponse.responseData['token'],
+      );
+    } else {
+      _loginErrorMessage = apiResponse.errorMessage;
+    }
+    isLoginProcessing = false;
+    notifyListeners();
     return success;
   }
 }

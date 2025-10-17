@@ -1,10 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/data/models/user_model.dart';
-import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/email_validator.dart';
-import 'package:todo_app/data/utils/urls.dart';
 import 'package:todo_app/ui/controllers/auth_controller.dart';
 import 'package:todo_app/ui/screens/forgot_password_email_screen.dart';
 import 'package:todo_app/ui/screens/main_nav_bar_holder.dart';
@@ -24,7 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController emailTEC = TextEditingController();
   TextEditingController passwordTEC = TextEditingController();
-  bool isProcessing = false;
   late AuthController authController;
   @override
   void initState() {
@@ -75,18 +71,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                         SizedBox(height: 12),
-                        Visibility(
-                          visible: !isProcessing,
-                          replacement: CircularProgressIndicator(
-                            strokeWidth: 5,
-                          ),
-                          child: FilledButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _loginCheck();
-                              }
-                            },
-                            child: Icon(Icons.arrow_circle_right_outlined),
+                        Consumer<AuthController>(
+                          builder: (context, value, child) => Visibility(
+                            visible: !value.isLoginProcessing,
+                            replacement: CircularProgressIndicator(
+                              strokeWidth: 5,
+                            ),
+                            child: FilledButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _loginCheck();
+                                }
+                              },
+                              child: Icon(Icons.arrow_circle_right_outlined),
+                            ),
                           ),
                         ),
                       ],
@@ -143,33 +141,24 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _loginCheck() async {
-    setState(() {
-      isProcessing = !isProcessing;
-    });
     Map<String, dynamic> body = {
       "email": emailTEC.text.trim(),
       "password": passwordTEC.text.trim(),
     };
-    ApiResponse apiResponse = await ApiCalller.postRequest(
-      url: Urls.userLogin,
-      body: body,
-    );
-    setState(() {
-      isProcessing = !isProcessing;
-    });
-    if (apiResponse.statusCode == 200 &&
-        apiResponse.responseData['status'] == 'success') {
-      await authController.saveUserData(
-        UserModel.fromJson(apiResponse.responseData['data']),
-        apiResponse.responseData['token'],
-      );
+    bool success = await authController.doLogin(body);
+
+    if (success) {
       Navigator.pushNamedAndRemoveUntil(
         context,
         MainNavBarHolder.name,
         (predicate) => false,
       );
     } else {
-      showSnackBar(context, apiResponse.errorMessage!, ToastType.error);
+      showSnackBar(
+        context,
+        authController.getLoginErrorMessage!,
+        ToastType.error,
+      );
     }
   }
 
