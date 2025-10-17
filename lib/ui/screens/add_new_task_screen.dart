@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/data/services/api_calller.dart';
-import 'package:todo_app/data/utils/urls.dart';
-import 'package:todo_app/ui/utils/refresh_new_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/ui/controllers/new_task_section_provider.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
 import 'package:todo_app/ui/widgets/show_toast.dart';
 import 'package:todo_app/ui/widgets/tm_app_bar.dart';
@@ -19,8 +18,6 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final TextEditingController _subjectTEC = TextEditingController();
   final TextEditingController _descriptionTEC = TextEditingController();
 
-  bool isProcessing = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,108 +32,96 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
               bottom: 16,
             ),
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 12,
-                children: [
-                  Text(
-                    "Add New Task",
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
+              child: Consumer<NewTaskSectionProvider>(
+                builder: (context, newTaskSectionProvider, child) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 12,
+                  children: [
+                    Text(
+                      "Add New Task",
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  Form(
-                    key: _fomKey,
-                    child: Column(
-                      spacing: 8,
-                      children: [
-                        TextFormField(
-                          controller: _subjectTEC,
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(label: Text('Subject')),
-                          validator: (value) {
-                            if (value!.trim() == "") {
-                              return "Must input a todo subject";
-                            }
-                            return null;
-                          },
-                          autovalidateMode: AutovalidateMode.onUnfocus,
-                        ),
+                    Form(
+                      key: _fomKey,
+                      child: Column(
+                        spacing: 8,
+                        children: [
+                          TextFormField(
+                            controller: _subjectTEC,
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(label: Text('Subject')),
+                            validator: (value) {
+                              if (value!.trim() == "") {
+                                return "Must input a todo subject";
+                              }
+                              return null;
+                            },
+                            autovalidateMode: AutovalidateMode.onUnfocus,
+                          ),
 
-                        TextFormField(
-                          controller: _descriptionTEC,
-                          textInputAction: TextInputAction.done,
-                          maxLines: 6,
-                          decoration: InputDecoration(
-                            label: Text('Description'),
-                            alignLabelWithHint: true,
+                          TextFormField(
+                            controller: _descriptionTEC,
+                            textInputAction: TextInputAction.done,
+                            maxLines: 6,
+                            decoration: InputDecoration(
+                              label: Text('Description'),
+                              alignLabelWithHint: true,
+                            ),
+                            validator: (value) {
+                              if (value!.trim() == "") {
+                                return "Must fill the decription of todo!";
+                              }
+                              return null;
+                            },
+                            autovalidateMode: AutovalidateMode.onUnfocus,
                           ),
-                          validator: (value) {
-                            if (value!.trim() == "") {
-                              return "Must fill the decription of todo!";
-                            }
-                            return null;
-                          },
-                          autovalidateMode: AutovalidateMode.onUnfocus,
-                        ),
-                        SizedBox(height: 8),
-                        Visibility(
-                          visible: !isProcessing,
-                          replacement: CircularProgressIndicator(
-                            strokeWidth: 5,
+                          SizedBox(height: 8),
+                          Visibility(
+                            visible: !newTaskSectionProvider.isCreating,
+                            replacement: CircularProgressIndicator(
+                              strokeWidth: 5,
+                            ),
+                            child: FilledButton.icon(
+                              onPressed: () async {
+                                if (_fomKey.currentState!.validate()) {
+                                  bool success = await newTaskSectionProvider
+                                      .createTodo(
+                                        _subjectTEC.text.trim(),
+                                        _descriptionTEC.text.trim(),
+                                      );
+                                  if (success) {
+                                    showSnackBar(
+                                      context,
+                                      "New ToDo added successfully!",
+                                      ToastType.success,
+                                    );
+                                    _descriptionTEC.clear();
+                                    _subjectTEC.clear();
+                                  } else {
+                                    showSnackBar(
+                                      context,
+                                      newTaskSectionProvider.getErrorMessage!,
+                                      ToastType.error,
+                                    );
+                                  }
+                                }
+                              },
+                              label: Icon(Icons.add_circle_outline_sharp),
+                            ),
                           ),
-                          child: FilledButton.icon(
-                            onPressed: _addTodo,
-                            label: Icon(Icons.add_circle_outline_sharp),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  Future<void> _addTodo() async {
-    if (_fomKey.currentState!.validate()) {
-      isProcessing = !isProcessing;
-      setState(() {});
-      Map<String, dynamic> body = {
-        "title": _subjectTEC.text,
-        "description": _subjectTEC.text,
-        "status": "New",
-      };
-
-      ApiResponse apiResponse = await ApiCalller.postRequest(
-        url: Urls.createTodo,
-        body: body,
-      );
-      if (apiResponse.isuccess) {
-        RefreshNewScreen.refresh!.call();
-
-        showSnackBar(
-          context,
-          "New ToDo added successfully!",
-          ToastType.success,
-        );
-        _descriptionTEC.clear();
-        _subjectTEC.clear();
-      } else {
-        showSnackBar(
-          context,
-          apiResponse.errorMessage.toString(),
-          ToastType.error,
-        );
-      }
-      setState(() {
-        isProcessing = !isProcessing;
-      });
-    }
   }
 
   @override

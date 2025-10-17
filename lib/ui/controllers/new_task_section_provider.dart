@@ -4,16 +4,21 @@ import 'package:todo_app/data/models/task_status_count_model.dart';
 import 'package:todo_app/data/services/api_calller.dart';
 import 'package:todo_app/data/utils/urls.dart';
 import 'package:todo_app/ui/utils/task_status.dart';
+import 'package:todo_app/ui/widgets/show_toast.dart';
 
 class NewTaskSectionProvider extends ChangeNotifier {
-  //to count todo
+  //for count todo
   bool isCounting = false;
   final Map<String, dynamic> _taskCount = {};
   Map<String, dynamic> getTaskCount() => _taskCount;
-  //to fetch todo list
+  //for fetch todo list
   bool isFatching = false;
   final List<TaskModel> _newTaskList = [];
   List<TaskModel> getTodo() => _newTaskList;
+  //for create new todo
+  bool isCreating = false;
+  String? _errorMessage;
+  String? get getErrorMessage => _errorMessage;
 
   //GET todo status count
   Future<void> getTodoStatusCount() async {
@@ -50,5 +55,31 @@ class NewTaskSectionProvider extends ChangeNotifier {
     }
     isFatching = false;
     notifyListeners();
+  }
+
+  //Create new todo
+  Future<bool> createTodo(String subject, String description) async {
+    _errorMessage = null;
+    bool success = false;
+    isCreating = true;
+    notifyListeners();
+    Map<String, dynamic> body = {
+      "title": subject,
+      "description": description,
+      "status": "New",
+    };
+    ApiResponse apiResponse = await ApiCalller.postRequest(
+      url: Urls.createTodo,
+      body: body,
+    );
+    if (apiResponse.isuccess) {
+      success = true;
+      _newTaskList.add(TaskModel.fromJson(apiResponse.responseData['data']));
+    } else {
+      _errorMessage = apiResponse.errorMessage.toString();
+    }
+    isCreating = false;
+    notifyListeners();
+    return success;
   }
 }
