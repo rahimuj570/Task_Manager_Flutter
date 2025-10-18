@@ -1,8 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/data/utils/email_validator.dart';
+import 'package:todo_app/ui/controllers/recovery_password_controller.dart';
 import 'package:todo_app/ui/screens/forgot_password_pin_screen.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
+import 'package:todo_app/ui/widgets/show_toast.dart';
 
 class ForgotPasswordEmailScreen extends StatefulWidget {
   const ForgotPasswordEmailScreen({super.key});
@@ -14,8 +18,12 @@ class ForgotPasswordEmailScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordEmailScreenState extends State<ForgotPasswordEmailScreen> {
+  final TextEditingController _emailTEC = TextEditingController();
+  final GlobalKey<FormState> _formlKey = GlobalKey<FormState>();
+  late RecoveryPasswordController recoveryPasswordController;
   @override
   Widget build(BuildContext context) {
+    recoveryPasswordController = context.read<RecoveryPasswordController>();
     return Scaffold(
       body: AppBackground(
         children: [
@@ -40,15 +48,35 @@ class _ForgotPasswordEmailScreenState extends State<ForgotPasswordEmailScreen> {
                   ),
                   SizedBox(height: 12),
                   Form(
+                    key: _formlKey,
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: _emailTEC,
                           decoration: InputDecoration(label: Text("Email")),
+                          validator: (value) =>
+                              EmailValidator.emailValidator(value!.trim()) ==
+                                  true
+                              ? null
+                              : "Invalid Email",
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                         SizedBox(height: 12),
-                        FilledButton(
-                          onPressed: _gotoPinScreen,
-                          child: Icon(Icons.arrow_circle_right_outlined),
+                        Consumer<RecoveryPasswordController>(
+                          builder: (context, value, child) => Visibility(
+                            visible: !value.isEmailVerifying,
+                            replacement: CircularProgressIndicator(
+                              strokeWidth: 5,
+                            ),
+                            child: FilledButton(
+                              onPressed: () {
+                                if (_formlKey.currentState!.validate()) {
+                                  _gotoPinScreen();
+                                }
+                              },
+                              child: Icon(Icons.arrow_circle_right_outlined),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -95,7 +123,30 @@ class _ForgotPasswordEmailScreenState extends State<ForgotPasswordEmailScreen> {
     );
   }
 
-  void _gotoPinScreen() {
-    Navigator.pushNamed(context, ForgotPasswordPinScreen.name);
+  Future<void> _gotoPinScreen() async {
+    bool success = await recoveryPasswordController.recoveryVerifyEmail(
+      _emailTEC.text,
+    );
+    if (success) {
+      if (!mounted) return;
+      showSnackBar(
+        context,
+        recoveryPasswordController.getSentPinMessage!,
+        ToastType.success,
+      );
+      await Future.delayed(Duration(seconds: 1));
+      if (!mounted) return;
+      Navigator.pushNamed(context, ForgotPasswordPinScreen.name);
+    } else {
+      if (!mounted) return;
+      showSnackBar(context, "Email is not registered!", ToastType.error);
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _emailTEC.dispose();
+    super.dispose();
   }
 }

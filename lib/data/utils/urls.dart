@@ -15,4 +15,7 @@ class Urls {
   static String deleteTaskById(String taskId) => "$_base/deleteTask/$taskId";
 
   static final String updateProfile = "$_base/ProfileUpdate";
+
+  static String recoverVerifyEmail(String email) =>
+      '$_base/RecoverVerifyEmail/$email';
 }

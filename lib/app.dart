@@ -5,6 +5,7 @@ import 'package:todo_app/ui/controllers/cancelled_task_section_provider.dart';
 import 'package:todo_app/ui/controllers/completed_task_section_provider.dart';
 import 'package:todo_app/ui/controllers/new_task_section_provider.dart';
 import 'package:todo_app/ui/controllers/progress_task_section_provider.dart';
+import 'package:todo_app/ui/controllers/recovery_password_controller.dart';
 import 'package:todo_app/ui/screens/add_new_task_screen.dart';
 import 'package:todo_app/ui/screens/edit_profile_screen.dart';
 import 'package:todo_app/ui/screens/forgot_password_email_screen.dart';
@@ -77,7 +78,10 @@ class TaskManagerApp extends StatelessWidget {
         routes: {
           SplashScreen.name: (_) => SplashScreen(),
           LoginScreen.name: (_) => LoginScreen(),
-          ForgotPasswordEmailScreen.name: (_) => ForgotPasswordEmailScreen(),
+          ForgotPasswordEmailScreen.name: (_) => ChangeNotifierProvider(
+            create: (context) => RecoveryPasswordController(),
+            child: ForgotPasswordEmailScreen(),
+          ),
           ForgotPasswordPinScreen.name: (_) => ForgotPasswordPinScreen(),
           RegistrationScreen.name: (_) => RegistrationScreen(),
           NewTaskScreen.name: (_) => NewTaskScreen(),
