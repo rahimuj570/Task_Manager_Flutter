@@ -82,7 +82,10 @@ class TaskManagerApp extends StatelessWidget {
             create: (context) => RecoveryPasswordController(),
             child: ForgotPasswordEmailScreen(),
           ),
-          ForgotPasswordPinScreen.name: (_) => ForgotPasswordPinScreen(),
+          ForgotPasswordPinScreen.name: (_) => ChangeNotifierProvider(
+            create: (_) => RecoveryPasswordController(),
+            child: ForgotPasswordPinScreen(),
+          ),
           RegistrationScreen.name: (_) => RegistrationScreen(),
           NewTaskScreen.name: (_) => NewTaskScreen(),
           CompletedTaskScreen.name: (_) => CompletedTaskScreen(),

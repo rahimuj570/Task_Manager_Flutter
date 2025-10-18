@@ -136,7 +136,11 @@ class _ForgotPasswordEmailScreenState extends State<ForgotPasswordEmailScreen> {
       );
       await Future.delayed(Duration(seconds: 1));
       if (!mounted) return;
-      Navigator.pushNamed(context, ForgotPasswordPinScreen.name);
+      Navigator.pushNamed(
+        context,
+        ForgotPasswordPinScreen.name,
+        arguments: _emailTEC.text,
+      );
     } else {
       if (!mounted) return;
       showSnackBar(context, "Email is not registered!", ToastType.error);

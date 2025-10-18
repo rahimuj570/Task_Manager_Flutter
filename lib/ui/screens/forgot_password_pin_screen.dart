@@ -1,9 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/ui/controllers/recovery_password_controller.dart';
 import 'package:todo_app/ui/screens/login_screen.dart';
 import 'package:todo_app/ui/screens/set_new_password_screen.dart';
 import 'package:todo_app/ui/widgets/app_background.dart';
+import 'package:todo_app/ui/widgets/show_toast.dart';
 
 class ForgotPasswordPinScreen extends StatefulWidget {
   const ForgotPasswordPinScreen({super.key});
@@ -31,9 +34,13 @@ class _ForgotPasswordPinScreenState extends State<ForgotPasswordPinScreen> {
   );
 
   bool _isPinCompleted = false;
-
+  late String email;
+  late RecoveryPasswordController recoveryPasswordController;
+  final TextEditingController _pinTEC = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    email = ModalRoute.of(context)!.settings.arguments as String;
+    recoveryPasswordController = context.read<RecoveryPasswordController>();
     return Scaffold(
       body: AppBackground(
         children: [
@@ -68,6 +75,7 @@ class _ForgotPasswordPinScreenState extends State<ForgotPasswordPinScreen> {
                     child: Column(
                       children: [
                         Pinput(
+                          controller: _pinTEC,
                           length: 6,
                           defaultPinTheme: defaultPinTheme,
                           onChanged: (value) {
@@ -81,15 +89,22 @@ class _ForgotPasswordPinScreenState extends State<ForgotPasswordPinScreen> {
                             setState(() {
                               _isPinCompleted = true;
                             });
-                            print('object');
                           },
                         ),
                         SizedBox(height: 12),
-                        FilledButton(
-                          onPressed: _isPinCompleted == false
-                              ? null
-                              : _verifyPin,
-                          child: Text('Verify'),
+                        Consumer<RecoveryPasswordController>(
+                          builder: (context, value, child) => Visibility(
+                            visible: !value.isPinVerifying,
+                            replacement: CircularProgressIndicator(
+                              strokeWidth: 5,
+                            ),
+                            child: FilledButton(
+                              onPressed: _isPinCompleted == false
+                                  ? null
+                                  : () => _verifyPin(_pinTEC.text.trim()),
+                              child: Text('Verify'),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -136,11 +151,33 @@ class _ForgotPasswordPinScreenState extends State<ForgotPasswordPinScreen> {
     );
   }
 
-  void _verifyPin() {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      SetNewPasswordScreen.name,
-      (route) => false,
-    );
+  Future<bool> _verifyPin(String pin) async {
+    bool success = await recoveryPasswordController.doVerifyPin(email, pin);
+    if (success) {
+      if (mounted) {
+        showSnackBar(
+          context,
+          recoveryPasswordController.getVerifyPinMessage!,
+          ToastType.success,
+        );
+      }
+      await Future.delayed(Duration(seconds: 1));
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          SetNewPasswordScreen.name,
+          (route) => false,
+        );
+      }
+    } else {
+      if (mounted) {
+        showSnackBar(
+          context,
+          recoveryPasswordController.getVerifyPinMessageError!,
+          ToastType.error,
+        );
+      }
+    }
+    return success;
   }
 }

@@ -18,4 +18,7 @@ class Urls {
 
   static String recoverVerifyEmail(String email) =>
       '$_base/RecoverVerifyEmail/$email';
+
+  static String recoveryVerifyPin(String email, String pin) =>
+      '$_base/RecoverVerifyOtp/$email/$pin';
 }
