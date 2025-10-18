@@ -21,4 +21,6 @@ class Urls {
 
   static String recoveryVerifyPin(String email, String pin) =>
       '$_base/RecoverVerifyOtp/$email/$pin';
+
+  static String resetPassword = '$_base/RecoverResetPassword';
 }

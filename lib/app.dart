@@ -92,7 +92,10 @@ class TaskManagerApp extends StatelessWidget {
           CancelledTaskScreen.name: (_) => CancelledTaskScreen(),
           ProgressTaskScreen.name: (_) => ProgressTaskScreen(),
           AddNewTaskScreen.name: (_) => AddNewTaskScreen(),
-          SetNewPasswordScreen.name: (_) => SetNewPasswordScreen(),
+          SetNewPasswordScreen.name: (_) => ChangeNotifierProvider(
+            create: (context) => RecoveryPasswordController(),
+            child: SetNewPasswordScreen(),
+          ),
           MainNavBarHolder.name: (_) => MainNavBarHolder(),
           EditProfileScreen.name: (_) => EditProfileScreen(),
         },

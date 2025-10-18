@@ -14,6 +14,14 @@ class RecoveryPasswordController extends ChangeNotifier {
   String? get getVerifyPinMessage => _verifyPinMessageSuccess;
   String? _verifyPinMessageError;
   String? get getVerifyPinMessageError => _verifyPinMessageError;
+
+  //For Reset Password
+  bool isPasswordReseting = false;
+  String? _resetPasswordSuccessMessage;
+  String? _resetPasswordErrorMessage;
+  String? get getResetPasswordSuccessMessage => _resetPasswordSuccessMessage;
+  String? get getResetPasswordErrorMessage => _resetPasswordErrorMessage;
+
   //To verify email and sent OTP to email
   Future<bool> recoveryVerifyEmail(String email) async {
     isEmailVerifying = true;
@@ -52,6 +60,28 @@ class RecoveryPasswordController extends ChangeNotifier {
       _verifyPinMessageError = apiResponse.responseData['data'];
     }
     isPinVerifying = false;
+    notifyListeners();
+    return success;
+  }
+
+  //To reset password
+  Future<bool> doresetPassword(Map<String, dynamic> body) async {
+    isPasswordReseting = true;
+    notifyListeners();
+    _resetPasswordErrorMessage = null;
+    _resetPasswordSuccessMessage = null;
+    bool success = false;
+    ApiResponse apiResponse = await ApiCalller.postRequest(
+      url: Urls.resetPassword,
+      body: body,
+    );
+    if (apiResponse.isuccess) {
+      success = true;
+      _resetPasswordSuccessMessage = apiResponse.responseData['data'];
+    } else {
+      _resetPasswordErrorMessage = apiResponse.responseData['data'];
+    }
+    isPasswordReseting = false;
     notifyListeners();
     return success;
   }

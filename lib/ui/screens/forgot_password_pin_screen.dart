@@ -166,6 +166,7 @@ class _ForgotPasswordPinScreenState extends State<ForgotPasswordPinScreen> {
         Navigator.pushNamedAndRemoveUntil(
           context,
           SetNewPasswordScreen.name,
+          arguments: {'email': email, 'pin': _pinTEC.text.trim()},
           (route) => false,
         );
       }
