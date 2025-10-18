@@ -75,7 +75,7 @@ class NewTaskSectionProvider extends ChangeNotifier {
       success = true;
       _newTaskList.add(TaskModel.fromJson(apiResponse.responseData['data']));
       _taskCount[TaskStatus.New.name] =
-          _taskCount[TaskStatus.New.name] ?? 0 + 1;
+          (_taskCount[TaskStatus.New.name] ?? 0) + 1;
     } else {
       _errorMessage = apiResponse.errorMessage.toString();
     }
