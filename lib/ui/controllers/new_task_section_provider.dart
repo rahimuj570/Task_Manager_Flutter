@@ -74,7 +74,8 @@ class NewTaskSectionProvider extends ChangeNotifier {
     if (apiResponse.isuccess) {
       success = true;
       _newTaskList.add(TaskModel.fromJson(apiResponse.responseData['data']));
-      _taskCount[TaskStatus.New.name] = _taskCount[TaskStatus.New.name] + 1;
+      _taskCount[TaskStatus.New.name] =
+          _taskCount[TaskStatus.New.name] ?? 0 + 1;
     } else {
       _errorMessage = apiResponse.errorMessage.toString();
     }
@@ -87,5 +88,9 @@ class NewTaskSectionProvider extends ChangeNotifier {
     _newTaskList.removeWhere((element) => element.id == id);
     notifyListeners();
     _taskCount[TaskStatus.New.name] = _taskCount[TaskStatus.New.name] - 1;
+  }
+
+  void increaseTodoStatusCountBy1(String status) {
+    _taskCount[status] = _taskCount[status] ?? 0 + 1;
   }
 }

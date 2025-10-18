@@ -22,7 +22,12 @@ class TaskStatusChangeController {
     );
     if (apiResponse.isuccess) {
       success = true;
-      refreshList(oldStatus, context, taskId);
+      refreshList(
+        newStatus: newStatus.name,
+        oldStatus: oldStatus,
+        context: context,
+        taskId: taskId,
+      );
     }
     return success;
   }
@@ -39,19 +44,23 @@ class TaskStatusChangeController {
     );
     if (apiResponse.isuccess) {
       success = true;
-      refreshList(status, context, taskId);
+      refreshList(oldStatus: status, context: context, taskId: taskId);
     }
     return success;
   }
 
   //Refresh List of Tasks
-  static void refreshList(
-    String oldStatus,
-    BuildContext context,
-    String taskId,
-  ) {
+  static void refreshList({
+    String? newStatus,
+    required String oldStatus,
+    required BuildContext context,
+    required String taskId,
+  }) {
     if (oldStatus == "New") {
       context.read<NewTaskSectionProvider>().removeTodoFromList(taskId);
+      context.read<NewTaskSectionProvider>().increaseTodoStatusCountBy1(
+        newStatus!,
+      );
     } else if (oldStatus == "Progress") {
       context.read<ProgressTaskSectionProvider>().removeTodoFromList(taskId);
     } else if (oldStatus == "Completed") {
