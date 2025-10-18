@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: AppBackground(
         children: [
-          Center(child: SvgPicture.asset(AssetsPathUtil.logoSvg, height: 35)),
+          Center(child: SvgPicture.asset(AssetsPathUtil.logoSvg, height: 100)),
           Align(
             alignment: Alignment(0, .8),
             child: CircularProgressIndicator(strokeWidth: 5),
