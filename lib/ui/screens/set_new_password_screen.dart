@@ -16,7 +16,6 @@ class SetNewPasswordScreen extends StatefulWidget {
 class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _newPasswordTEC = TextEditingController();
-  final TextEditingController _confrmNewPasswordTEC = TextEditingController();
   late RecoveryPasswordController recoveryPasswordController;
   late Map<dynamic, dynamic> emailPinArgs;
 
