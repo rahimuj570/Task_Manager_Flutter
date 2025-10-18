@@ -5,7 +5,6 @@
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.32.2-blue?logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.8.1-blue?logo=dart)
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![State Management](https://img.shields.io/badge/Provider-State%20Management-orange)
 ![Contributions Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)
 
@@ -107,11 +106,8 @@ lib/
 | 🏡 **Home Screen (Dashboard)**              | ![Home Screen](assets/screenshots/home.png)              |
 | 🗒️ **Create Task Screen**                  | ![Create Task](assets/screenshots/create_task.png)       |
 | 🔄 **Update / Edit Task Screen**            | ![Edit Task](assets/screenshots/edit_task.png)           |
-| 📋 **Task List Screen**                     | ![Task List](assets/screenshots/task_list.png)           |
 | 📊 **Task Status Filter / Progress Screen** | ![Status Screen](assets/screenshots/status.png)          |
-| 👤 **Profile Screen**                       | ![Profile](assets/screenshots/profile.png)               |
 | ⚙️ **Edit Profile Screen**                  | ![Edit Profile](assets/screenshots/edit_profile.png)     |
-| ⚓ **Navigation Drawer / Bottom Nav**        | ![Navigation](assets/screenshots/navigation.png)         |
 
 
 ---
@@ -135,8 +131,8 @@ If you'd like to improve this app, feel free to:
 ---
 
 ## 🪪 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project is licensed for **personal and educational use only.**  
+See the [LICENSE](./LICENSE) file for details.
 
 ---
 
